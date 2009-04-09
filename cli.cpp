@@ -20,8 +20,8 @@
 
 #include <unistd.h>
 
-#include "include/uuid.h"
-#include "include/devrandom.h"
+#include "kashmir/uuid.h"
+#include "kashmir/devrandom.h"
 
 namespace
 {
