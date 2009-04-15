@@ -1,10 +1,10 @@
 /********************************************************************\
- * cli.cpp -- UUID UNIX command line interface                      *
+ * wincmd.cpp -- UUID Windows command                               *
  *                                                                  *
  * Copyright (C) 2009 Kenneth Laskoski                              *
  *                                                                  *
 \********************************************************************/
-/** @file cli.cpp
+/** @file wincmd.cpp
     @brief universally unique ID
     @author Copyright (C) 2009 Kenneth Laskoski
     based on work by
@@ -15,13 +15,22 @@
     LICENSE_1_0.txt or a copy at <http://www.boost.org/LICENSE_1_0.txt>.)
 */
 
+#include "kashmir/uuid.h"
+#include "kashmir/winrandom.h"
+
+namespace
+{
+    using kashmir::uuid_t;
+    using kashmir::system::WinRandom;
+
+    uuid_t uuid;
+    WinRandom winrandom;
+}
+
 #include <iostream>
 #include <fstream>
 
 #include <unistd.h>
-
-#include "kashmir/uuid.h"
-#include "kashmir/devrandom.h"
 
 namespace
 {
@@ -38,7 +47,7 @@ namespace
         while ((ch = getopt(argc, argv, "n:o:")) != -1) {
             switch (ch) {
                 case 'n':
-                    n = strtol(optarg, &p, 10);
+                    n = strtoul(optarg, &p, 10);
                     if (*p != '\0' || n < 1)
                         std::cerr << "invalid argument to option 'n'\n";
                     break;
@@ -55,21 +64,12 @@ namespace
     }
 }
 
-namespace
-{
-    using kashmir::system::DevRandom;
-    using kashmir::uuid_t;
-
-    DevRandom devrandom;
-    uuid_t uuid;
-}
-
 /* main procedure */
 int main(int argc, char *argv[])
 {
     parse_cmd_line(argc, argv);
 
-    DevRandom& in = devrandom;
+    WinRandom& in = winrandom;
     std::ostream& out = *outp;
 
     for (int i = 0; i < n; i++) {
