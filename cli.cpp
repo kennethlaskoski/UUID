@@ -1,10 +1,10 @@
 /********************************************************************\
- * wincmd.cpp -- UUID Windows command                               *
+ * cli.cpp -- UUID UNIX command line interface                      *
  *                                                                  *
  * Copyright (C) 2009 Kenneth Laskoski                              *
  *                                                                  *
 \********************************************************************/
-/** @file wincmd.cpp
+/** @file cli.cpp
     @brief universally unique ID
     @author Copyright (C) 2009 Kenneth Laskoski
     based on work by
@@ -16,15 +16,15 @@
 */
 
 #include "kashmir/uuid.h"
-#include "kashmir/winrandom.h"
+#include "kashmir/devrandom.h"
 
 namespace
 {
     using kashmir::uuid_t;
-    using kashmir::system::WinRandom;
+    using kashmir::system::DevRandom;
 
     uuid_t uuid;
-    WinRandom winrandom;
+    DevRandom devrandom;
 }
 
 #include <iostream>
@@ -69,7 +69,7 @@ int main(int argc, char *argv[])
 {
     parse_cmd_line(argc, argv);
 
-    WinRandom& in = winrandom;
+    DevRandom& in = devrandom;
     std::ostream& out = *outp;
 
     for (int i = 0; i < n; i++) {
