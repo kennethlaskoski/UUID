@@ -47,12 +47,24 @@ class uuid_t
 {
     // an UUID is a string of 16 octets (128 bits)
 
-    typedef uint8_t octet_type;
+    typedef unsigned char value_type;
 
     typedef std::size_t size_type;
     static const size_type size = 16;
 
-    octet_type data[size];
+    value_type data[size];
+
+    // we use an unpacked representation, value_type may be larger than 8 bits,
+    // in which case every input operation must assert data[i] < 256 for i < 16
+
+    // test for "nil" value
+    bool is_nil() const
+    {
+        for (size_type i = 0; i < size; ++i)
+            if (data[i])
+                return false;
+        return true;
+    }
 
 public:
 
@@ -92,16 +104,7 @@ public:
     bool operator>=(const uuid_t& rhs) const { return !(*this < rhs); }
     bool operator!=(const uuid_t& rhs) const { return !(*this == rhs); }
 
-    // test for "nil" value
-    bool is_nil() const
-    {
-        for (size_type i = 0; i < size; ++i)
-            if (data[i])
-                return false;
-        return true;
-    }
-
-    // some syntatic sugar using the previous method
+    // some syntatic sugar using the is_nil method
     bool operator!() const { return is_nil(); } 
 
     typedef bool (uuid_t::*bool_type)() const;
@@ -148,7 +151,7 @@ std::basic_ostream<char_t, char_traits>& operator<<(std::basic_ostream<char_t, c
         for (size_t i = 0; i < 16; ++i)
         {
             os.width(2);
-            os << static_cast<unsigned int>(uuid.data[i]);
+            os << static_cast<unsigned>(uuid.data[i]);
             if (i == 3 || i == 5 || i == 7 || i == 9)
                 os << os.widen('-');
         }
@@ -194,7 +197,7 @@ std::basic_istream<char_t, char_traits>& operator>>(std::basic_istream<char_t, c
                 break;
             }
 
-            uuid.data[i] = static_cast<uuid_t::octet_type>(f - hexdigits);
+            uuid.data[i] = static_cast<uuid_t::value_type>(std::distance(hexdigits, f));
 
             is >> c;
             c = facet.tolower(c);
@@ -207,7 +210,7 @@ std::basic_istream<char_t, char_traits>& operator>>(std::basic_istream<char_t, c
             }
 
             uuid.data[i] <<= 4;
-            uuid.data[i] |= static_cast<uuid_t::octet_type>(f - hexdigits);
+            uuid.data[i] |= static_cast<uuid_t::value_type>(std::distance(hexdigits, f));
 
             if (i == 3 || i == 5 || i == 7 || i == 9)
             {
@@ -236,14 +239,23 @@ user::randomstream<user_impl>& operator>>(user::randomstream<user_impl>& is, uui
     is.read(buffer, 16);
     std::copy(buffer, buffer+16, uuid.data);
 
+#if 0
+    // this loop is necessary if uuid_t::value_type is larger than 8 bits,
+    // so as to maintain the invariant [uuid.data[i] < 256 for all i < 16]
+    // note even char may be more than 8 bits in some particular platform.
+
+    for (size_t i = 0; i < 16; ++i)
+        uuid.data[i] &= 0xff;
+#endif
+
     // set variant
     // should be 0b10xxxxxx
-    uuid.data[8] &= 0xBF;   // 0b10111111
+    uuid.data[8] &= 0xbf;   // 0b10111111
     uuid.data[8] |= 0x80;   // 0b10000000
 
     // set version
     // should be 0b0100xxxx
-    uuid.data[6] &= 0x4F;   // 0b01001111
+    uuid.data[6] &= 0x4f;   // 0b01001111
     uuid.data[6] |= 0x40;   // 0b01000000
 
     return is;
