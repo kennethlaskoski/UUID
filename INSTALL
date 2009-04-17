@@ -1,0 +1,8 @@
+As this is a small piece of software, we do not provide any configure script
+or makefile. This is a header-only library, to make use of it you should copy
+the kashmir directory to a location that is visible to your preprocessor and
+include the proper header in your code.
+
+kashmir/uuid.h provides a concrete type compliant to RFC 4122. It was a design
+decision to make uuid_t resemble a built-in type as much as possible, so the
+interface is limited to the comparison operators and test for nil.
