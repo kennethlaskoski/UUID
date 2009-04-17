@@ -25,7 +25,6 @@
 #include "randomstream.h"
 
 #include <cstddef>
-#include <stdint.h>
 
 #include <stdexcept>
 #include <algorithm>
