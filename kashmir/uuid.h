@@ -22,6 +22,7 @@
 
 #include <istream>
 #include <ostream>
+#include <sstream>
 #include "randomstream.h"
 
 #include <cstddef>
@@ -45,6 +46,8 @@ namespace uuid {
 class uuid_t
 {
     // an UUID is a string of 16 octets (128 bits)
+    // we use an unpacked representation, value_type may be larger than 8 bits,
+    // in which case every input operation must assert data[i] < 256 for i < 16
 
     typedef unsigned char value_type;
 
@@ -52,9 +55,6 @@ class uuid_t
     static const size_type size = 16;
 
     value_type data[size];
-
-    // we use an unpacked representation, value_type may be larger than 8 bits,
-    // in which case every input operation must assert data[i] < 256 for i < 16
 
     // test for "nil" value
     bool is_nil() const
@@ -85,6 +85,13 @@ public:
     {
         std::copy(rhs.data, rhs.data+size, data);
         return *this;
+    }
+
+    // this constructor is intended to allow static initialization
+    explicit uuid_t(const char* literal)
+    {
+        std::stringstream input(literal);
+        input >> *this;
     }
 
     // comparison operators define a total order
@@ -241,7 +248,7 @@ user::randomstream<user_impl>& operator>>(user::randomstream<user_impl>& is, uui
 #if 0
     // this loop is necessary if uuid_t::value_type is larger than 8 bits,
     // so as to maintain the invariant [uuid.data[i] < 256 for all i < 16]
-    // note even char may be more than 8 bits in some particular platform.
+    // note even char may be more than 8 bits in some particular platform
 
     for (size_t i = 0; i < 16; ++i)
         uuid.data[i] &= 0xff;
