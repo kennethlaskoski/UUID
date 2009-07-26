@@ -87,7 +87,7 @@ public:
         return *this;
     }
 
-    // this constructor is intended to allow static initialization
+    // initialization from string literal
     explicit uuid_t(const char* literal)
     {
         std::stringstream input(literal);
@@ -124,7 +124,7 @@ public:
     friend std::basic_ostream<char_t, char_traits>& operator<<(std::basic_ostream<char_t, char_traits>& os, const uuid_t& uuid);
 
     template<class char_t, class char_traits>
-    friend std::basic_istream<char_t, char_traits>& operator>>(std::basic_istream<char_t, char_traits>& os, uuid_t& uuid);
+    friend std::basic_istream<char_t, char_traits>& operator>>(std::basic_istream<char_t, char_traits>& is, uuid_t& uuid);
 
     // operator to extract a version 4 uuid from a random stream
     template<class user_impl>
