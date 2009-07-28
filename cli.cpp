@@ -64,7 +64,6 @@ namespace
     }
 }
 
-/* main procedure */
 int main(int argc, char *argv[])
 {
     parse_cmd_line(argc, argv);
