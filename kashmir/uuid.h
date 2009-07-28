@@ -46,14 +46,13 @@ namespace uuid {
 class uuid_t
 {
     // an UUID is a string of 16 octets (128 bits)
-    // we use an unpacked representation, value_type may be larger than 8 bits,
-    // in which case every input operation must assert data[i] < 256 for i < 16
-
-    typedef unsigned char value_type;
-
     typedef std::size_t size_type;
     static const size_type size = 16;
 
+    // we use an unpacked representation, value_type may be larger than 8 bits,
+    // in which case every input operation must assert data[i] < 256 for i < 16
+    // note even char may be more than 8 bits in some particular platform
+    typedef unsigned char value_type;
     value_type data[size];
 
     // test for "nil" value
@@ -249,9 +248,8 @@ user::randomstream<user_impl>& operator>>(user::randomstream<user_impl>& is, uui
     // this loop is necessary if uuid_t::value_type is larger than 8 bits,
     // so as to maintain the invariant [uuid.data[i] < 256 for all i < 16]
     // note even char may be more than 8 bits in some particular platform
-
-    for (size_t i = 0; i < 16; ++i)
-        uuid.data[i] &= 0xff;
+//    for (size_t i = 0; i < 16; ++i)
+//        uuid.data[i] &= 0xff;
 #endif
 
     // set variant
