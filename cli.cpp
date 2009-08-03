@@ -18,15 +18,6 @@
 #include "kashmir/uuid.h"
 #include "kashmir/devrandom.h"
 
-namespace
-{
-    using kashmir::uuid_t;
-    using kashmir::system::DevRandom;
-
-    uuid_t uuid;
-    DevRandom devrandom;
-}
-
 #include <iostream>
 #include <fstream>
 
@@ -34,10 +25,15 @@ namespace
 
 namespace
 {
+    using kashmir::uuid_t;
+    using kashmir::system::DevRandom;
+    using std::ostream;
+    using std::ofstream;
+
     int n = 1;
 
-    std::ostream* outp = &std::cout;
-    std::ofstream ofile;
+    ostream* outp = &std::cout;
+    ofstream ofile;
 
     void parse_cmd_line(int argc, char *argv[])
     {
@@ -68,9 +64,12 @@ int main(int argc, char *argv[])
 {
     parse_cmd_line(argc, argv);
 
-    DevRandom& in = devrandom;
-    std::ostream& out = *outp;
+    DevRandom devrandom;
 
+    DevRandom& in = devrandom;
+    ostream& out = *outp;
+
+    uuid_t uuid;
     for (int i = 0; i < n; i++) {
         in >> uuid;            
         out << uuid << '\n';
