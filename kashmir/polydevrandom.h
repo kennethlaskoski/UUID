@@ -1,11 +1,11 @@
 /********************************************************************\
- * devrandom.h -- UNIX random number generator                      *
+ * polydevrandom.h -- polymorphic UNIX random number generator      *
  *                                                                  *
  * Copyright (C) 2009 Kenneth Laskoski                              *
  *                                                                  *
 \********************************************************************/
-/** @file devrandom.h
-    @brief UNIX random number generator
+/** @file polydevrandom.h
+    @brief polymorphic UNIX random number generator
     @author Copyright (C) 2009 Kenneth Laskoski
     based on work by
     @author Copyright (C) 1996, 1997, 1998 Theodore Ts'o
@@ -16,10 +16,10 @@
     LICENSE_1_0.txt or a copy at <http://www.boost.org/LICENSE_1_0.txt>.)
 */
 
-#ifndef KL_DEVRANDOM_H 
-#define KL_DEVRANDOM_H 
+#ifndef KL_POLYDEVRANDOM_H 
+#define KL_POLYDEVRANDOM_H 
 
-#include "randomstream.h"
+#include "abstractrandomstream.h"
 #include "noncopyable.h"
 
 #include <fstream>
@@ -28,10 +28,10 @@
 namespace kashmir {
 namespace system {
 
-class DevRandom : public user::randomstream<DevRandom>, noncopyable
+class PolyDevRandom : public user::AbstractRandomStream, noncopyable
 {
 public:
-    DevRandom() : file("/dev/urandom", std::ios::binary)
+    PolyDevRandom() : file("/dev/urandom", std::ios::binary)
     {
         if (!file)
             throw std::runtime_error("failed to open random device.");
