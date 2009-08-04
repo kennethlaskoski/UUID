@@ -1,17 +1,9 @@
 This is the Kashmir Library.
 
-The Kashmir Library is intended to provide functionality needed in many
-software projects, but not present in the C++ standard library. It overlaps
-with existing C libraries and with the Boost libraries.
+The Kashmir Library is intended to provide functionality needed in many software
+projects, but not present in the C++ standard library.
 
-The advantage over C libraries is the use of C++ as a tool that supports
-principles such as abstraction, encapsulation and decoupling, which were
-born to facilitate design and implementation of larger systems.
-
-As for Boost libraries, the difference is more subtle. Boost strives to be as
-general as possible, covering the myriad of CPU-OS-Compiler combinations that
-are available. On the flip side, we apply the KISS principle, keeping the code
-as neat as possible, while still being able to build on Linux and Windows with
-the "default" compiler, respectively g++ and VC++.
+Languages like Java or C# come along with a ready-to-use collection of code that
+take care of boilerplate work. Our goal is to provide similar code in C++.
 
 We provide the source code, you can adapt it to any particular need.
