@@ -1,11 +1,11 @@
 /********************************************************************\
- * cli.cpp -- UNIX command line interface                           *
+ * cmd.cpp -- Windows command line interface                        *
  *                                                                  *
  * Copyright (C) 2009 Kenneth Laskoski                              *
  *                                                                  *
 \********************************************************************/
-/** @file cli.cpp
-    @brief UNIX command line interface
+/** @file cmd.cpp
+    @brief Windows command line interface
     @author Copyright (C) 2009 Kenneth Laskoski
     based on work by
     @author Copyright (C) 2004-2008 Ralf S. Engelschall <rse@engelschall.com>
@@ -16,7 +16,7 @@
 */
 
 #include "kashmir/uuid.h"
-#include "kashmir/devrandom.h"
+#include "kashmir/winrandom.h"
 
 #include <iostream>
 #include <fstream>
@@ -26,7 +26,7 @@
 namespace
 {
     using kashmir::uuid_t;
-    using kashmir::system::DevRandom;
+    using kashmir::system::WinRandom;
     using std::ostream;
     using std::ofstream;
 
@@ -64,9 +64,9 @@ int main(int argc, char *argv[])
 {
     parse_cmd_line(argc, argv);
 
-    DevRandom devrandom;
+    WinRandom winrandom;
 
-    DevRandom& in = devrandom;
+    WinRandom& in = winrandom;
     ostream& out = *outp;
 
     uuid_t uuid;

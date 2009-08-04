@@ -48,6 +48,7 @@ class uuid_t
     // an UUID is a string of 16 octets (128 bits)
     typedef std::size_t size_type;
     static const size_type size = 16;
+    static const size_type string_size = 36; // XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX
 
     // we use an unpacked representation, value_type may be larger than 8 bits,
     // in which case every input operation must assert data[i] < 256 for i < 16
@@ -90,7 +91,7 @@ public:
     explicit uuid_t(const char* literal)
     {
         std::stringstream input(literal);
-        input >> *this;
+        this->get(input);
     }
 
     // comparison operators define a total order
@@ -101,7 +102,7 @@ public:
 
     bool operator<(const uuid_t& rhs) const
     {
-        return std::lexicographical_compare(data,data+size,rhs.data,rhs.data+size);
+        return std::lexicographical_compare(data, data+size, rhs.data, rhs.data+size);
     }
     
     bool operator>(const uuid_t& rhs) const { return (rhs < *this); }
@@ -118,20 +119,20 @@ public:
         return is_nil() ? 0 : &uuid_t::is_nil;
     }
 
-    // stream operators
+    // insertion and extraction 
     template<class char_t, class char_traits>
-    friend std::basic_ostream<char_t, char_traits>& operator<<(std::basic_ostream<char_t, char_traits>& os, const uuid_t& uuid);
+    std::basic_ostream<char_t, char_traits>& put(std::basic_ostream<char_t, char_traits>& os) const;
 
     template<class char_t, class char_traits>
-    friend std::basic_istream<char_t, char_traits>& operator>>(std::basic_istream<char_t, char_traits>& is, uuid_t& uuid);
+    std::basic_istream<char_t, char_traits>& get(std::basic_istream<char_t, char_traits>& is);
 
-    // operator to extract a version 4 uuid from a random stream
+    // version 4 uuid extraction from a random stream
     template<class user_impl>
-    friend user::randomstream<user_impl>& operator>>(user::randomstream<user_impl>& is, uuid_t& uuid);
+    user::randomstream<user_impl>& get(user::randomstream<user_impl>& is);
 };
 
 template<class char_t, class char_traits>
-std::basic_ostream<char_t, char_traits>& operator<<(std::basic_ostream<char_t, char_traits>& os, const uuid_t& uuid)
+std::basic_ostream<char_t, char_traits>& uuid_t::put(std::basic_ostream<char_t, char_traits>& os) const
 {
     if (!os.good())
         return os;
@@ -143,7 +144,7 @@ std::basic_ostream<char_t, char_traits>& operator<<(std::basic_ostream<char_t, c
         basic_ios_fill_saver<char_t, char_traits> fill(os);
 
         const std::streamsize width = os.width(0);
-        const std::streamsize mysize = 36; // 32 hex digits and four dashes
+        const std::streamsize mysize = string_size;
 
         // right padding
         if (flags.value() & (std::ios_base::right | std::ios_base::internal))
@@ -156,7 +157,7 @@ std::basic_ostream<char_t, char_traits>& operator<<(std::basic_ostream<char_t, c
         for (size_t i = 0; i < 16; ++i)
         {
             os.width(2);
-            os << static_cast<unsigned>(uuid.data[i]);
+            os << static_cast<unsigned>(data[i]);
             if (i == 3 || i == 5 || i == 7 || i == 9)
                 os << os.widen('-');
         }
@@ -171,7 +172,7 @@ std::basic_ostream<char_t, char_traits>& operator<<(std::basic_ostream<char_t, c
 }
 
 template<class char_t, class char_traits>
-std::basic_istream<char_t, char_traits>& operator>>(std::basic_istream<char_t, char_traits>& is, uuid_t& uuid)
+std::basic_istream<char_t, char_traits>& uuid_t::get(std::basic_istream<char_t, char_traits>& is)
 {
     if (!is.good())
         return is;
@@ -190,7 +191,7 @@ std::basic_istream<char_t, char_traits>& operator>>(std::basic_istream<char_t, c
 
         char_t c;
         char_t* f;
-        for (size_t i = 0; i < 16; ++i)
+        for (size_t i = 0; i < size; ++i)
         {
             is >> c;
             c = facet.tolower(c);
@@ -202,7 +203,7 @@ std::basic_istream<char_t, char_traits>& operator>>(std::basic_istream<char_t, c
                 break;
             }
 
-            uuid.data[i] = static_cast<uuid_t::value_type>(std::distance(hexdigits, f));
+            data[i] = static_cast<value_type>(std::distance(hexdigits, f));
 
             is >> c;
             c = facet.tolower(c);
@@ -214,8 +215,8 @@ std::basic_istream<char_t, char_traits>& operator>>(std::basic_istream<char_t, c
                 break;
             }
 
-            uuid.data[i] <<= 4;
-            uuid.data[i] |= static_cast<uuid_t::value_type>(std::distance(hexdigits, f));
+            data[i] <<= 4;
+            data[i] |= static_cast<value_type>(std::distance(hexdigits, f));
 
             if (i == 3 || i == 5 || i == 7 || i == 9)
             {
@@ -235,34 +236,49 @@ std::basic_istream<char_t, char_traits>& operator>>(std::basic_istream<char_t, c
     return is;
 }
 
-// operator to extract a version 4 uuid from a random stream
 template<class user_impl>
-user::randomstream<user_impl>& operator>>(user::randomstream<user_impl>& is, uuid_t& uuid)
+user::randomstream<user_impl>& uuid_t::get(user::randomstream<user_impl>& is)
 {
     // get random bytes
-    char buffer[16];
-    is.read(buffer, 16);
-    std::copy(buffer, buffer+16, uuid.data);
+    char buffer[size];
+    is.read(buffer, size);
+    std::copy(buffer, buffer+size, data);
 
-#if 0
     // this loop is necessary if uuid_t::value_type is larger than 8 bits,
-    // so as to maintain the invariant [uuid.data[i] < 256 for all i < 16]
+    // in order to maintain the invariant data[i] < 256 for i < 16
     // note even char may be more than 8 bits in some particular platform
-//    for (size_t i = 0; i < 16; ++i)
-//        uuid.data[i] &= 0xff;
-#endif
+//    for (size_t i = 0; i < size; ++i)
+//        data[i] &= 0xff;
 
     // set variant
     // should be 0b10xxxxxx
-    uuid.data[8] &= 0xbf;   // 0b10111111
-    uuid.data[8] |= 0x80;   // 0b10000000
+    data[8] &= 0xbf;   // 0b10111111
+    data[8] |= 0x80;   // 0b10000000
 
     // set version
     // should be 0b0100xxxx
-    uuid.data[6] &= 0x4f;   // 0b01001111
-    uuid.data[6] |= 0x40;   // 0b01000000
+    data[6] &= 0x4f;   // 0b01001111
+    data[6] |= 0x40;   // 0b01000000
 
     return is;
+}
+
+template<class char_t, class char_traits>
+inline std::basic_ostream<char_t, char_traits>& operator<<(std::basic_ostream<char_t, char_traits>& os, const uuid_t& uuid)
+{
+    return uuid.put(os);
+}
+
+template<class char_t, class char_traits>
+inline std::basic_istream<char_t, char_traits>& operator>>(std::basic_istream<char_t, char_traits>& is, uuid_t& uuid)
+{
+    return uuid.get(is);
+}
+
+template<class user_impl>
+inline user::randomstream<user_impl>& operator>>(user::randomstream<user_impl>& is, uuid_t& uuid)
+{
+    return uuid.get(is);
 }
 
 } // namespace kashmir::uuid
