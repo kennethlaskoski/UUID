@@ -10,6 +10,8 @@
     based on work by
     @author Copyright (C) 1996, 1997, 1998 Theodore Ts'o
     @author Copyright (C) 2004-2008 Ralf S. Engelschall <rse@engelschall.com>
+    with contribution of
+    @author Chet Stuut
 
     Use, modification, and distribution are subject
     to the Boost Software License, Version 1.0.  (See accompanying file
@@ -35,15 +37,17 @@ namespace system {
 class WinRandom : public user::randomstream<WinRandom>, noncopyable
 {
 public:
-    WinRandom()
+    WinRandom(HCRYPTPROV hProv = NULL) : hProv(hProv), raii(hProv == NULL)
     {
-        if (!CryptAcquireContext(&hProv, NULL, NULL, PROV_RSA_FULL, 0))
-            throw std::runtime_error("failed to acquire cryptographic context.");
+        if (raii && !CryptAcquireContext(&hProv, NULL, NULL, PROV_RSA_FULL, 0))
+            if (GetLastError() != NTE_BAD_KEYSET || !CryptAcquireContext(&hProv, NULL, NULL, PROV_RSA_FULL, CRYPT_NEWKEYSET))
+                throw std::runtime_error("failed to acquire cryptographic context.");
     }
 
     ~WinRandom()
     {
-        CryptReleaseContext(hProv, 0);
+        if (raii)
+            CryptReleaseContext(hProv, 0);
     }
 
     void read(char* buffer, std::size_t count)
@@ -54,6 +58,7 @@ public:
 
 private:
     HCRYPTPROV hProv;
+    bool raii;
 };
 
 }}
