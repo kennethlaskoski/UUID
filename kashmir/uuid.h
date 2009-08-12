@@ -283,10 +283,9 @@ inline user::randomstream<user_impl>& operator>>(user::randomstream<user_impl>& 
 
 inline bool is_nil(const uuid_t& uuid)
 {
-    if (!uuid)
-        return true;
-    else
+    if (uuid)
         return false;
+    return true;
 }
 
 } // namespace kashmir::uuid
