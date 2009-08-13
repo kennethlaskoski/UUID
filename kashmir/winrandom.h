@@ -22,7 +22,7 @@
 #define KL_WINRANDOM_H 
 
 #include "randomstream.h"
-#include "noncopyable.h"
+#include "unique.h"
 
 #include <stdexcept>
 
@@ -34,8 +34,11 @@
 namespace kashmir {
 namespace system {
 
-class WinRandom : public user::randomstream<WinRandom>, noncopyable
+class WinRandom : public user::randomstream<WinRandom>, unique
 {
+    HCRYPTPROV hProv;
+    bool raii;
+
 public:
     WinRandom(HCRYPTPROV hProv = NULL) : hProv(hProv), raii(hProv == NULL)
     {
@@ -55,10 +58,6 @@ public:
         if (!CryptGenRandom(hProv, count, buffer))
             throw std::runtime_error("system failed to generate random data.");
     }
-
-private:
-    HCRYPTPROV hProv;
-    bool raii;
 };
 
 }}

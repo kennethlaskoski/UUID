@@ -23,7 +23,7 @@
 #define KL_WINRAND_H
 
 #include "randomstream.h"
-#include "noncopyable.h"
+#include "unique.h"
 
 #include <stdexcept>
 
@@ -34,25 +34,30 @@
 namespace kashmir {
 namespace system {
 
-class WinRand : public user::randomstream<WinRand>, noncopyable
+class WinRand : public user::randomstream<WinRand>, unique
 {
+    typedef BOOLEAN (APIENTRY *prototype)(void*, ULONG);
+    prototype RtlGenRandom;
+
+    HMODULE advapi32;
+
 public:
-    WinRand() : hLib(LoadLibrary("ADVAPI32.DLL"))
+    WinRand() : advapi32(LoadLibrary("ADVAPI32.DLL"))
     {
-        if (!hLib)
+        if (!advapi32)
             throw std::runtime_error("failed to load ADVAPI32.DLL.");
 
-        RtlGenRandom = (BOOLEAN (APIENTRY *)(void*,ULONG)) GetProcAddress(hLib,"SystemFunction036");
+        RtlGenRandom = static_cast<prototype>(GetProcAddress(advapi32, "SystemFunction036"));
         if (!RtlGenRandom)
         {
-            FreeLibrary(hLib);
+            FreeLibrary(advapi32);
             throw std::runtime_error("failed to get ADVAPI32!RtlGenRandom address.");
         }
     }
 
     ~WinRand()
     {
-        FreeLibrary(hLib);
+        FreeLibrary(advapi32);
     }
 
     void read(char* buffer, std::size_t count)
@@ -60,10 +65,6 @@ public:
         if (!RtlGenRandom(buffer, count))
             throw std::runtime_error("system failed to generate random data.");
     }
-
-private:
-    HMODULE hLib;
-    BOOLEAN (APIENTRY *RtlGenRandom)(void*, ULONG);
 };
 
 }}

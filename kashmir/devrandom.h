@@ -20,7 +20,7 @@
 #define KL_DEVRANDOM_H 
 
 #include "randomstream.h"
-#include "noncopyable.h"
+#include "unique.h"
 
 #include <fstream>
 #include <stdexcept>
@@ -28,8 +28,10 @@
 namespace kashmir {
 namespace system {
 
-class DevRandom : public user::randomstream<DevRandom>, noncopyable
+class DevRandom : public user::randomstream<DevRandom>, unique
 {
+    std::ifstream file;
+
 public:
     DevRandom() : file("/dev/urandom", std::ios::binary)
     {
@@ -41,9 +43,6 @@ public:
     {
         file.read(buffer, count);
     }
-
-private:
-    std::ifstream file;
 };
 
 }}
