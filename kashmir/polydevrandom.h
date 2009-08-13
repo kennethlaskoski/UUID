@@ -20,7 +20,7 @@
 #define KL_POLYDEVRANDOM_H 
 
 #include "abstractrandomstream.h"
-#include "noncopyable.h"
+#include "unique.h"
 
 #include <fstream>
 #include <stdexcept>
@@ -28,8 +28,10 @@
 namespace kashmir {
 namespace system {
 
-class PolyDevRandom : public user::AbstractRandomStream, noncopyable
+class PolyDevRandom : public user::AbstractRandomStream, unique
 {
+    std::ifstream file;
+
 public:
     PolyDevRandom() : file("/dev/urandom", std::ios::binary)
     {
@@ -41,9 +43,6 @@ public:
     {
         file.read(buffer, count);
     }
-
-private:
-    std::ifstream file;
 };
 
 }}
