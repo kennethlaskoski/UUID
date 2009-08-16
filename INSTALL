@@ -3,11 +3,14 @@ or makefile. This is a header-only library, to make use of it you should copy
 the kashmir directory to a location that is visible to your preprocessor and
 include the proper header in your code.
 
-* uuid.h : provides a concrete type compliant to RFC 4122. It was a design
-decision to make uuid_t resemble a built-in type as much as possible, so the
-interface is limited to comparison operators, which allow sorting and use as
-key in a std::map; a predicate that tests for nil value; and stream inserter
-and extractor operators.
+* uuid.h : the uuid_t class implements a type compliant to RFC 4122. It was a
+design decision to make uuid_t resemble a built-in type as much as possible, so
+we limit the interface to: a predicate test for nil; comparison operators that
+define a total order; and stream operators to expose the standard character
+string representation XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX.
+
+In particular, we do not provide direct access to the internal
+data
 
 * devrandom.h : provides a random stream using the /dev/urandom file nowadays
 implemented in many UNIX flavors.
