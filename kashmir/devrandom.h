@@ -28,7 +28,7 @@
 namespace kashmir {
 namespace system {
 
-class DevRandom : public user::randomstream<DevRandom>, unique
+class DevRandom : public user::randomstream<DevRandom>, unique<DevRandom>
 {
     std::ifstream file;
 

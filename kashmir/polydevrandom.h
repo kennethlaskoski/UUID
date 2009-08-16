@@ -28,7 +28,7 @@
 namespace kashmir {
 namespace system {
 
-class PolyDevRandom : public user::AbstractRandomStream, unique
+class PolyDevRandom : public user::AbstractRandomStream, unique<PolyDevRandom>
 {
     std::ifstream file;
 
