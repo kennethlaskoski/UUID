@@ -34,22 +34,20 @@
 namespace kashmir {
 namespace system {
 
-class WinRandom : public user::randomstream<WinRandom>, unique
+class WinRandom : public user::randomstream<WinRandom>, unique<WinRandom>
 {
     HCRYPTPROV hProv;
-    bool raii;
 
 public:
-    WinRandom(HCRYPTPROV hProv = NULL) : hProv(hProv), raii(hProv == NULL)
+    WinRandom(HCRYPTPROV hProv = NULL) : hProv(hProv)
     {
-        if (raii && !CryptAcquireContext(&hProv, NULL, NULL, PROV_RSA_FULL, 0))
+        if (!CryptAcquireContext(&hProv, NULL, NULL, PROV_RSA_FULL, 0))
             if (GetLastError() != NTE_BAD_KEYSET || !CryptAcquireContext(&hProv, NULL, NULL, PROV_RSA_FULL, CRYPT_NEWKEYSET))
                 throw std::runtime_error("failed to acquire cryptographic context.");
     }
 
     ~WinRandom()
     {
-        if (raii)
             CryptReleaseContext(hProv, 0);
     }
 

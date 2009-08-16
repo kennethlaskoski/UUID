@@ -34,7 +34,7 @@
 namespace kashmir {
 namespace system {
 
-class WinRand : public user::randomstream<WinRand>, unique
+class WinRand : public user::randomstream<WinRand>, unique<WinRand>
 {
     typedef BOOLEAN (APIENTRY *prototype)(void*, ULONG);
     prototype RtlGenRandom;

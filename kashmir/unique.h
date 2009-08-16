@@ -15,8 +15,9 @@
 #define KL_UNIQUE_H
 
 namespace kashmir {
-namespace unique_ { // prevents unintended ADL
+namespace unique_ADL_fence {
 
+template<class CRTP>
 class unique
 {
 protected:
@@ -28,10 +29,22 @@ private:
     const unique& operator=(const unique&);
 };
 
+template<class T>
+bool operator==(const unique<T>& lhs, const unique<T>& rhs)
+{
+    return &lhs == &rhs;
 }
 
-typedef unique_::unique unique;
-
+template<class T>
+inline bool operator!=(const unique<T>& lhs, const unique<T>& rhs)
+{
+    return !(lhs == rhs);
 }
+
+} // namespace kashmir::unique_ADL_fence
+
+using namespace unique_ADL_fence;
+
+} // namespace kashmir
 
 #endif
