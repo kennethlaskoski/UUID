@@ -48,7 +48,7 @@ public:
 
     ~WinRandom()
     {
-            CryptReleaseContext(hProv, 0);
+        CryptReleaseContext(hProv, 0);
     }
 
     void read(char* buffer, std::size_t count)

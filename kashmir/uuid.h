@@ -1,17 +1,10 @@
-/********************************************************************\
- * uuid.h -- universally unique ID - as defined by ISO/IEC 9834-8   *
- *                                                                  *
- * Copyright (C) 2008 Kenneth Laskoski                              *
- *                                                                  *
-\********************************************************************/
+// uuid.h -- universally unique ID - as defined by ISO/IEC 9834-8:2005
+
+// Copyright (C) 2008 Kenneth Laskoski
+
 /** @file uuid.h
     @brief universally unique ID - as defined by ISO/IEC 9834-8:2005
     @author Copyright (C) 2008 Kenneth Laskoski
-    based on work by
-    @author Copyright (C) 2006 Andy Tompkins
-    @author Copyright (C) 2000 Dave Peticolas <peticola@cs.ucdavis.edu>
-    @author Copyright (C) 1996, 1997, 1998 Theodore Ts'o
-    @author Copyright (C) 2004-2008 Ralf S. Engelschall <rse@engelschall.com>
 
     Use, modification, and distribution are subject
     to the Boost Software License, Version 1.0.  (See accompanying file
@@ -19,6 +12,8 @@
 */
 #ifndef KL_UUID_H
 #define KL_UUID_H 
+
+#include "array.h"
 
 #include <istream>
 #include <ostream>
@@ -46,15 +41,16 @@ namespace uuid {
 class uuid_t
 {
     // an UUID is a string of 16 octets (128 bits)
-    typedef std::size_t size_type;
-    static const size_type size = 16;
-    static const size_type string_size = 36; // XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX
-
     // we use an unpacked representation, value_type may be larger than 8 bits,
     // in which case every input operation must assert data[i] < 256 for i < 16
     // note even char may be more than 8 bits in some particular platform
     typedef unsigned char value_type;
-    value_type data[size];
+    typedef std::size_t size_type;
+
+    enum { size = 16, string_size = 36 };
+
+    typedef array<value_type, size> data_type;
+    data_type data;
 
     // test for "nil" value
     bool is_nil() const
@@ -66,45 +62,36 @@ class uuid_t
     }
 
 public:
-
-    // default value is "nil"
-    uuid_t()
-    {
-        std::fill(data, data+size, 0);
-    }
-    
-    // destruction, copy and assignment
+    uuid_t() {}
     ~uuid_t() {}
 
-    uuid_t(const uuid_t& rhs)
-    {
-        std::copy(rhs.data, rhs.data+size, data);
-    }
+    // copy and assignment
+    uuid_t(const uuid_t& rhs) : data(rhs.data) {}
 
     uuid_t& operator=(const uuid_t& rhs)
     {
-        std::copy(rhs.data, rhs.data+size, data);
+        data = rhs.data;
         return *this;
     }
 
-    // initialization from string literal
-    explicit uuid_t(const char* literal)
+    // initialization from C string
+    explicit uuid_t(const char* string)
     {
-        std::stringstream input(literal);
-        this->get(input);
+        std::stringstream stream(string);
+        get(stream);
     }
 
     // comparison operators define a total order
     bool operator==(const uuid_t& rhs) const
     {
-        return std::equal(data, data+size, rhs.data);
+        return data == rhs.data;
     }
 
     bool operator<(const uuid_t& rhs) const
     {
-        return std::lexicographical_compare(data, data+size, rhs.data, rhs.data+size);
+        return data < rhs.data;
     }
-    
+
     bool operator>(const uuid_t& rhs) const { return (rhs < *this); }
     bool operator<=(const uuid_t& rhs) const { return !(rhs < *this); }
     bool operator>=(const uuid_t& rhs) const { return !(*this < rhs); }
@@ -119,7 +106,7 @@ public:
         return is_nil() ? 0 : &uuid_t::is_nil;
     }
 
-    // insertion and extraction 
+    // stream operators
     template<class char_t, class char_traits>
     std::basic_ostream<char_t, char_traits>& put(std::basic_ostream<char_t, char_traits>& os) const;
 
@@ -242,7 +229,7 @@ user::randomstream<user_impl>& uuid_t::get(user::randomstream<user_impl>& is)
     // get random bytes
     char buffer[size];
     is.read(buffer, size);
-    std::copy(buffer, buffer+size, data);
+    std::copy(buffer, buffer+size, data.begin());
 
     // this loop is necessary if uuid_t::value_type is larger than 8 bits,
     // in order to maintain the invariant data[i] < 256 for i < 16
