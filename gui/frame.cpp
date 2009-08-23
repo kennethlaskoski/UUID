@@ -53,7 +53,9 @@ Frame::Frame(const wxString& title)
 
 void Frame::generate_nil_uuid(wxCommandEvent&)
 {
-    static kashmir::uuid_t nil;
+    static const kashmir::uuid_t nil("00000000-0000-0000-0000-000000000000");
+
+    assert(nil ? false : true);
 
     buffer << nil << '\n';
 

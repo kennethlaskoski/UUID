@@ -10,10 +10,12 @@
     to the Boost Software License, Version 1.0.  (See accompanying file
     LICENSE_1_0.txt or a copy at <http://www.boost.org/LICENSE_1_0.txt>.)
 */
+
 #ifndef KL_UUID_H
 #define KL_UUID_H 
 
 #include "array.h"
+#include "boolean.h"
 
 #include <istream>
 #include <ostream>
@@ -38,7 +40,7 @@ namespace uuid {
     These technically equivalent standards document the code below.
 */
 
-class uuid_t
+class uuid_t : public boolean<uuid_t>
 {
     // an UUID is a string of 16 octets (128 bits)
     // we use an unpacked representation, value_type may be larger than 8 bits,
@@ -97,13 +99,9 @@ public:
     bool operator>=(const uuid_t& rhs) const { return !(*this < rhs); }
     bool operator!=(const uuid_t& rhs) const { return !(*this == rhs); }
 
-    // some syntatic sugar using the is_nil method
-    bool operator!() const { return is_nil(); } 
-
-    typedef bool (uuid_t::*bool_type)() const;
-    operator bool_type() const
+    bool operator!() const
     {
-        return is_nil() ? 0 : &uuid_t::is_nil;
+        return is_nil();
     }
 
     // stream operators
@@ -266,13 +264,6 @@ template<class user_impl>
 inline user::randomstream<user_impl>& operator>>(user::randomstream<user_impl>& is, uuid_t& uuid)
 {
     return uuid.get(is);
-}
-
-inline bool is_nil(const uuid_t& uuid)
-{
-    if (uuid)
-        return false;
-    return true;
 }
 
 } // namespace kashmir::uuid
