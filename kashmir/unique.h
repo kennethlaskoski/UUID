@@ -17,6 +17,7 @@
 namespace kashmir {
 namespace unique_ADL_fence {
 
+// CRTP allows better EBO
 template<class CRTP>
 class unique
 {
@@ -26,25 +27,13 @@ protected:
 
 private:
     unique(const unique&);
-    const unique& operator=(const unique&);
+    unique& operator=(const unique&);
 };
 
-template<class T>
-bool operator==(const unique<T>& lhs, const unique<T>& rhs)
-{
-    return &lhs == &rhs;
 }
-
-template<class T>
-inline bool operator!=(const unique<T>& lhs, const unique<T>& rhs)
-{
-    return !(lhs == rhs);
-}
-
-} // namespace kashmir::unique_ADL_fence
 
 using namespace unique_ADL_fence;
 
-} // namespace kashmir
+}
 
 #endif
