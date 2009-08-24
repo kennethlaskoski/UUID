@@ -13,18 +13,18 @@
     LICENSE_1_0.txt or a copy at <http://www.boost.org/LICENSE_1_0.txt>.)
 */
 
-#include "../kashmir/devrandom.h"
+#include "../kashmir/devrand.h"
 
 #include <wx/wx.h>
 
 class App : public wxApp
 {
-    kashmir::system::DevRandom devrandom;
+    kashmir::system::DevRand devrandom;
 
 public:
     virtual bool OnInit();
 
-    kashmir::system::DevRandom& DevRandom()
+    kashmir::system::DevRand& DevRandom()
     {
         return devrandom;
     }

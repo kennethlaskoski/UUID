@@ -16,7 +16,7 @@
 */
 
 #include "kashmir/uuid.h"
-#include "kashmir/devrandom.h"
+#include "kashmir/devrand.h"
 
 #include <iostream>
 #include <fstream>
@@ -26,7 +26,7 @@
 namespace
 {
     using kashmir::uuid_t;
-    using kashmir::system::DevRandom;
+    using kashmir::system::DevRand;
     using std::ostream;
     using std::ofstream;
 
@@ -64,9 +64,9 @@ int main(int argc, char *argv[])
 {
     parse_cmd_line(argc, argv);
 
-    DevRandom devrandom;
+    DevRand devrandom;
 
-    DevRandom& in = devrandom;
+    DevRand& in = devrandom;
     ostream& out = *outp;
 
     uuid_t uuid;
