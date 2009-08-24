@@ -1,8 +1,8 @@
-// devrandom.h -- UNIX random number generator
+// devrand.h -- UNIX random number generator
 
 // Copyright (C) 2008 Kenneth Laskoski
 
-/** @file devrandom.h
+/** @file devrand.h
     @brief UNIX random number generator
     @author Copyright (C) 2008 Kenneth Laskoski
 
@@ -11,8 +11,8 @@
     LICENSE_1_0.txt or <http://www.boost.org/LICENSE_1_0.txt>.
 */
 
-#ifndef KL_DEVRANDOM_H 
-#define KL_DEVRANDOM_H 
+#ifndef KL_DEVRAND_H 
+#define KL_DEVRAND_H 
 
 #include "randomstream.h"
 #include "unique.h"
@@ -23,12 +23,12 @@
 namespace kashmir {
 namespace system {
 
-class DevRandom : public user::randomstream<DevRandom>, unique<DevRandom>
+class DevRand : public user::randomstream<DevRand>, unique<DevRand>
 {
     std::ifstream file;
 
 public:
-    DevRandom() : file("/dev/random", std::ios::binary)
+    DevRand() : file("/dev/urandom", std::ios::binary)
     {
         if (!file)
             throw std::runtime_error("failed to open random device.");

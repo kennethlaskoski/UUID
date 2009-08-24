@@ -6,16 +6,15 @@
     @brief universally unique ID - as defined by ISO/IEC 9834-8:2005
     @author Copyright (C) 2008 Kenneth Laskoski
 
-    Use, modification, and distribution are subject
-    to the Boost Software License, Version 1.0.  (See accompanying file
-    LICENSE_1_0.txt or a copy at <http://www.boost.org/LICENSE_1_0.txt>.)
+    Use, modification, and distribution are subject to the
+    Boost Software License, Version 1.0. See accompanying file
+    LICENSE_1_0.txt or <http://www.boost.org/LICENSE_1_0.txt>.
 */
 
 #ifndef KL_UUID_H
 #define KL_UUID_H 
 
 #include "array.h"
-#include "boolean.h"
 
 #include <istream>
 #include <ostream>
@@ -40,7 +39,7 @@ namespace uuid {
     These technically equivalent standards document the code below.
 */
 
-class uuid_t : public boolean<uuid_t>
+class uuid_t
 {
     // an UUID is a string of 16 octets (128 bits)
     // we use an unpacked representation, value_type may be larger than 8 bits,
@@ -83,6 +82,14 @@ public:
         get(stream);
     }
 
+    // safe bool idiom
+    typedef data_type uuid_t::*bool_type; 
+
+    operator bool_type() const
+    {
+        return is_nil() ? 0 : &uuid_t::data;
+    }
+
     // comparison operators define a total order
     bool operator==(const uuid_t& rhs) const
     {
@@ -98,11 +105,6 @@ public:
     bool operator<=(const uuid_t& rhs) const { return !(rhs < *this); }
     bool operator>=(const uuid_t& rhs) const { return !(*this < rhs); }
     bool operator!=(const uuid_t& rhs) const { return !(*this == rhs); }
-
-    bool operator!() const
-    {
-        return is_nil();
-    }
 
     // stream operators
     template<class char_t, class char_traits>
