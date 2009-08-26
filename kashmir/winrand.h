@@ -41,7 +41,7 @@ public:
         if (!advapi32)
             throw std::runtime_error("failed to load ADVAPI32.DLL.");
 
-        RtlGenRandom = static_cast<BOOLEAN (APIENTRY *)(void*, ULONG)>(GetProcAddress(advapi32, "SystemFunction036"));
+        RtlGenRandom = reinterpret_cast<BOOLEAN (APIENTRY *)(void*, ULONG)>(GetProcAddress(advapi32, "SystemFunction036"));
         if (!RtlGenRandom)
         {
             FreeLibrary(advapi32);
