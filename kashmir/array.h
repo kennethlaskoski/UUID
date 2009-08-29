@@ -33,6 +33,18 @@ public:
 
     enum { size = N };
 
+    // copy and assignment
+    array(const array& rhs)
+    {
+        std::copy(rhs.data, rhs.data+size, data);
+    }
+
+    array& operator=(const array& rhs)
+    {
+        std::copy(rhs.data, rhs.data+size, data);
+        return *this;
+    }
+
     value_type& operator[](size_type i) { return data[i]; }
     const value_type& operator[](size_type i) const { return data[i]; }
 
@@ -51,18 +63,6 @@ public:
     typedef std::reverse_iterator<const_iterator> const_reverse_iterator;
     const_reverse_iterator rbegin() const { return const_reverse_iterator(end()); }
     const_reverse_iterator rend() const { return const_reverse_iterator(begin()); }
-
-    // copy and assignment
-    array(const array& rhs)
-    {
-        std::copy(rhs.data, rhs.data+size, data);
-    }
-
-    array& operator=(const array& rhs)
-    {
-        std::copy(rhs.data, rhs.data+size, data);
-        return *this;
-    }
 
     // comparison operators define a total order
     bool operator==(const array& rhs) const
