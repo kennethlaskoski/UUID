@@ -53,15 +53,6 @@ class uuid_t
     typedef array<value_type, size> data_type;
     data_type data;
 
-    // test for "nil" value
-    bool is_nil() const
-    {
-        for (size_type i = 0; i < size; ++i)
-            if (data[i])
-                return false;
-        return true;
-    }
-
 public:
     uuid_t() {}
     ~uuid_t() {}
@@ -80,6 +71,15 @@ public:
     {
         std::stringstream stream(string);
         get(stream);
+    }
+
+    // test for "nil" value
+    bool is_nil() const
+    {
+        for (size_type i = 0; i < size; ++i)
+            if (data[i])
+                return false;
+        return true;
     }
 
     // safe bool idiom
@@ -227,13 +227,19 @@ template<class user_impl>
 user::randomstream<user_impl>& uuid_t::get(user::randomstream<user_impl>& is)
 {
     // get random bytes
-    char buffer[size];
-    is.read(buffer, size);
-    std::copy(buffer, buffer+size, data.begin());
 
-    // this loop is necessary if uuid_t::value_type is larger than 8 bits,
-    // in order to maintain the invariant data[i] < 256 for i < 16
-    // note even char may be more than 8 bits in some particular platform
+    // RAE: we take advantage of our representation
+    is.read(reinterpret_cast<char*>(this), size);
+
+    // a more general solution would be
+//    input_iterator<is> it;
+//    std::copy(it, it+size, data.begin());
+
+    // is >> data;
+
+    // if uuid_t::value_type is larger than 8 bits, we need
+    // to maintain the invariant data[i] < 256 for i < 16
+    // Example (this may impact randomness):
 //    for (size_t i = 0; i < size; ++i)
 //        data[i] &= 0xff;
 
