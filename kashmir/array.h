@@ -63,23 +63,25 @@ public:
     typedef std::reverse_iterator<const_iterator> const_reverse_iterator;
     const_reverse_iterator rbegin() const { return const_reverse_iterator(end()); }
     const_reverse_iterator rend() const { return const_reverse_iterator(begin()); }
-
-    // comparison operators define a total order
-    bool operator==(const array& rhs) const
-    {
-        return std::equal(data, data+size, rhs.data);
-    }
-
-    bool operator<(const array& rhs) const
-    {
-        return std::lexicographical_compare(data, data+size, rhs.data, rhs.data+size);
-    }
-
-    bool operator>(const array& rhs) const { return (rhs < *this); }
-    bool operator<=(const array& rhs) const { return !(rhs < *this); }
-    bool operator>=(const array& rhs) const { return !(*this < rhs); }
-    bool operator!=(const array& rhs) const { return !(*this == rhs); }
 };
+
+// comparison operators define a total order
+template<class T, std::size_t N>
+inline bool operator==(const array<T, N>& lhs, const array<T, N>& rhs)
+{
+    return std::equal(lhs.begin(), lhs.end(), rhs.begin());
+}
+
+template<class T, std::size_t N>
+inline bool operator<(const array<T, N>& lhs, const array<T, N>& rhs)
+{
+    return std::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end());
+}
+
+template<class T, std::size_t N> inline bool operator>(const array<T, N>& lhs, const array<T, N>& rhs) { return (rhs < lhs); }
+template<class T, std::size_t N> inline bool operator<=(const array<T, N>& lhs, const array<T, N>& rhs) { return !(rhs < lhs); }
+template<class T, std::size_t N> inline bool operator>=(const array<T, N>& lhs, const array<T, N>& rhs) { return !(lhs < rhs); }
+template<class T, std::size_t N> inline bool operator!=(const array<T, N>& lhs, const array<T, N>& rhs) { return !(lhs == rhs); }
 
 } // namespace kashmir
 
