@@ -18,7 +18,7 @@
 
 bool App::OnInit()
 {
-    Frame *main = new Frame("GOOID");
+    Frame *main = new Frame(L"GOOID");
     main->Show();
     return true;
 }

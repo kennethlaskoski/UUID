@@ -60,7 +60,7 @@ void Frame::generate_nil_uuid(wxCommandEvent&)
     buffer << nil << '\n';
 
     result->AppendText(buffer.str());
-    buffer.str(std::string());
+    buffer.str(L"");
 }
 
 void Frame::generate_v4_uuid(wxCommandEvent&)
@@ -69,7 +69,7 @@ void Frame::generate_v4_uuid(wxCommandEvent&)
     buffer << uuid << '\n';
 
     result->AppendText(buffer.str());
-    buffer.str(std::string());
+    buffer.str(L"");
 }
 
 BEGIN_EVENT_TABLE(Frame, wxFrame)
