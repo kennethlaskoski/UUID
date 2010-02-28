@@ -54,7 +54,13 @@ class uuid_t
     data_type data;
 
 public:
-    uuid_t() {}
+    // default constructor sets nil value
+    uuid_t()
+    {
+        for (size_type i = 0; i < size; ++i)
+            data[i] = 0;
+    }
+
     ~uuid_t() {}
 
     // copy and assignment
@@ -73,7 +79,7 @@ public:
         get(stream);
     }
 
-    // test for "nil" value
+    // test for nil value
     bool is_nil() const
     {
         for (size_type i = 0; i < size; ++i)
@@ -90,21 +96,8 @@ public:
         return is_nil() ? 0 : &uuid_t::data;
     }
 
-    // comparison operators define a total order
-    bool operator==(const uuid_t& rhs) const
-    {
-        return data == rhs.data;
-    }
-
-    bool operator<(const uuid_t& rhs) const
-    {
-        return data < rhs.data;
-    }
-
-    bool operator>(const uuid_t& rhs) const { return (rhs < *this); }
-    bool operator<=(const uuid_t& rhs) const { return !(rhs < *this); }
-    bool operator>=(const uuid_t& rhs) const { return !(*this < rhs); }
-    bool operator!=(const uuid_t& rhs) const { return !(*this == rhs); }
+    friend bool operator==(const uuid_t& lhs, const uuid_t& rhs);
+    friend bool operator<(const uuid_t& lhs, const uuid_t& rhs);
 
     // stream operators
     template<class char_t, class char_traits>
@@ -117,6 +110,22 @@ public:
     template<class user_impl>
     user::randomstream<user_impl>& get(user::randomstream<user_impl>& is);
 };
+
+// comparison operators define a total order
+inline bool operator==(const uuid_t& lhs, const uuid_t& rhs)
+{
+    return lhs.data == rhs.data;
+}
+
+inline bool operator<(const uuid_t& lhs, const uuid_t& rhs)
+{
+    return lhs.data < rhs.data;
+}
+
+inline bool operator>(const uuid_t& lhs, const uuid_t& rhs) { return (rhs < lhs); }
+inline bool operator<=(const uuid_t& lhs, const uuid_t& rhs) { return !(rhs < lhs); }
+inline bool operator>=(const uuid_t& lhs, const uuid_t& rhs) { return !(lhs < rhs); }
+inline bool operator!=(const uuid_t& lhs, const uuid_t& rhs) { return !(lhs == rhs); }
 
 template<class char_t, class char_traits>
 std::basic_ostream<char_t, char_traits>& uuid_t::put(std::basic_ostream<char_t, char_traits>& os) const
@@ -234,8 +243,6 @@ user::randomstream<user_impl>& uuid_t::get(user::randomstream<user_impl>& is)
     // a more general solution would be
 //    input_iterator<is> it;
 //    std::copy(it, it+size, data.begin());
-
-    // is >> data;
 
     // if uuid_t::value_type is larger than 8 bits, we need
     // to maintain the invariant data[i] < 256 for i < 16
