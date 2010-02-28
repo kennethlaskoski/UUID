@@ -21,7 +21,7 @@
 class Frame : public wxFrame
 {
     kashmir::uuid_t uuid;
-    std::stringstream buffer;
+    std::wstringstream buffer;
 
     wxPanel *lpanel;
     wxButton *niluuidgen;
