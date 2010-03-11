@@ -23,16 +23,16 @@ enum
 };
 
 Frame::Frame(const wxString& title)
-    : wxFrame(0, wxID_ANY, title)
+    : wxFrame(0, wxID_ANY, title, wxPoint(-1, -1), wxSize(500, -1))
 {
     wxPanel *root = new wxPanel(this, wxID_ANY);
 
     lpanel = new wxPanel(root);
-    niluuidgen = new wxButton(lpanel, niluuidgenID, wxT("Generate nil UUID"), wxPoint(-1, -1));
-    v4uuidgen = new wxButton(lpanel, v4uuidgenID, wxT("Generate version 4 UUID"), wxPoint(-1, -1));
+    niluuidgen = new wxButton(lpanel, niluuidgenID, L"Generate nil UUID", wxPoint(-1, -1));
+    v4uuidgen = new wxButton(lpanel, v4uuidgenID, L"Generate version 4 UUID", wxPoint(-1, -1));
 
     rpanel = new wxPanel(root);
-    result = new wxTextCtrl(rpanel, wxID_ANY, wxT(""), wxPoint(-1, -1), wxSize(-1, -1), wxTE_MULTILINE);
+    result = new wxTextCtrl(rpanel, wxID_ANY, L"", wxPoint(-1, -1), wxSize(-1, -1), wxTE_MULTILINE);
 
     v4uuidgen->SetFocus();
 
