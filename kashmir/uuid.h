@@ -54,13 +54,8 @@ class uuid_t
     data_type data;
 
 public:
-    // default constructor sets nil value
-    uuid_t()
-    {
-        for (size_type i = 0; i < size; ++i)
-            data[i] = 0;
-    }
-
+    // uninitialized memory
+    uuid_t() {}
     ~uuid_t() {}
 
     // copy and assignment
