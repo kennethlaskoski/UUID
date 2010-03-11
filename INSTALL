@@ -8,12 +8,12 @@ design decision to make uuid_t resemble a built-in type as much as possible, so
 we limit the interface to: a predicate test for nil; comparison operators that
 define a total order; and stream operators to expose the standard character
 string representation XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX.
+In particular, we do not provide direct access to the internal data.
 
-In particular, we do not provide direct access to the internal
-data
-
-* devrandom.h : provides a random stream using the /dev/urandom file nowadays
+* devrandom.h : provides a random stream using the /dev/random file nowadays
 implemented in many UNIX flavors.
+
+* devrand.h : like the above, but uses the non-blocking /dev/urandom file.
 
 * winrandom.h : implements a random stream in Windows with CryptGenRandom.
 
