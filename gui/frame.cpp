@@ -19,6 +19,7 @@
 enum
 {
     v4uuidgenID = 101,
+    md5uuidgenID = 102,
     niluuidgenID,
 };
 
@@ -30,6 +31,7 @@ Frame::Frame(const wxString& title)
     lpanel = new wxPanel(root);
     niluuidgen = new wxButton(lpanel, niluuidgenID, L"Generate nil UUID", wxPoint(-1, -1));
     v4uuidgen = new wxButton(lpanel, v4uuidgenID, L"Generate version 4 UUID", wxPoint(-1, -1));
+    md5uuidgen = new wxButton(lpanel, md5uuidgenID, L"Generate MD5 UUID", wxPoint(-1, -1));
 
     rpanel = new wxPanel(root);
     result = new wxTextCtrl(rpanel, wxID_ANY, L"", wxPoint(-1, -1), wxSize(-1, -1), wxTE_MULTILINE);
@@ -39,6 +41,7 @@ Frame::Frame(const wxString& title)
     wxBoxSizer *lsizer = new wxBoxSizer(wxVERTICAL);
     lsizer->Add(niluuidgen, 0, normal, border);
     lsizer->Add(v4uuidgen, 0, normal, border);
+    lsizer->Add(md5uuidgen, 0, normal, border);
     lpanel->SetSizer(lsizer);
 
     wxBoxSizer *rsizer = new wxBoxSizer(wxVERTICAL);
@@ -72,7 +75,17 @@ void Frame::generate_v4_uuid(wxCommandEvent&)
     buffer.str(L"");
 }
 
+void Frame::generate_md5_uuid(wxCommandEvent&)
+{
+    // >> uuid;
+    buffer << uuid << '\n';
+
+    result->AppendText(buffer.str());
+    buffer.str(L"");
+}
+
 BEGIN_EVENT_TABLE(Frame, wxFrame)
     EVT_BUTTON(niluuidgenID,  Frame::generate_nil_uuid)
     EVT_BUTTON(v4uuidgenID,  Frame::generate_v4_uuid)
+    EVT_BUTTON(md5uuidgenID,  Frame::generate_md5_uuid)
 END_EVENT_TABLE()
