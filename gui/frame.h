@@ -26,6 +26,7 @@ class Frame : public wxFrame
     wxPanel *lpanel;
     wxButton *niluuidgen;
     wxButton *v4uuidgen;
+    wxButton *md5uuidgen;
 
     wxPanel *rpanel;
     wxTextCtrl *result;
@@ -34,6 +35,7 @@ class Frame : public wxFrame
 
     void generate_nil_uuid(wxCommandEvent& event);
     void generate_v4_uuid(wxCommandEvent& event);
+    void generate_md5_uuid(wxCommandEvent& event);
 
     static const int normal = wxEXPAND | wxTOP | wxLEFT;
     static const int versus = wxEXPAND | wxRIGHT | wxBOTTOM;
