@@ -37,7 +37,6 @@
     documentation and/or software. 
 */
 
-
 #ifndef KL_MD5_H
 #define KL_MD5_H 
 
@@ -71,25 +70,25 @@ template<class T> T rotate_left(T x, T y) { return x << y | x >> (32 - y); }
 template<class T>
 void FF(T& a, T b, T c, T d, T x, T s, T ac){
     a += F(b, c, d) + x + ac;
-    a = rotate_left (a, s) +b;
+    a = rotate_left(a, s) +b;
 }
 
 template<class T>
 void GG(T& a, T b, T c, T d, T x, T s, T ac){
     a += G(b, c, d) + x + ac;
-    a = rotate_left (a, s) +b;
+    a = rotate_left(a, s) +b;
 }
 
 template<class T>
 void HH(T& a, T b, T c, T d, T x, T s, T ac){
     a += H(b, c, d) + x + ac;
-    a = rotate_left (a, s) +b;
+    a = rotate_left(a, s) +b;
 }
 
 template<class T>
 void II(T& a, T b, T c, T d, T x, T s, T ac){
     a += I(b, c, d) + x + ac;
-    a = rotate_left (a, s) +b;
+    a = rotate_left(a, s) +b;
 }
 
 
