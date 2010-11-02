@@ -53,44 +53,30 @@
 
 #include "iostate.h"
 
+#include <cstring>
+
 namespace kashmir {
 namespace md5 {
 
-// F, G, H and I are basic MD5 functions.
-template<class T> T F(T x, T y, T z) { return (x & y) | (~x & z); } 
-template<class T> T G(T x, T y, T z) { return (x & z) | (y & ~z); }
-template<class T> T H(T x, T y, T z) { return x ^ y ^ z; }
-template<class T> T I(T x, T y, T z) { return y ^ (x | ~z); }
+// Although we could use C++ style constants, defines are actually better,
+// since they let us easily evade scope clashes.
 
-// left rotation
-template<class T> T rotate_left(T x, T y) { return x << y | x >> (32 - y); }
-
-// FF, GG, HH, and II transformations for rounds 1, 2, 3, and 4.
-// Rotation is separate from addition to prevent recomputation.
-template<class T>
-void FF(T& a, T b, T c, T d, T x, T s, T ac){
-    a += F(b, c, d) + x + ac;
-    a = rotate_left(a, s) +b;
-}
-
-template<class T>
-void GG(T& a, T b, T c, T d, T x, T s, T ac){
-    a += G(b, c, d) + x + ac;
-    a = rotate_left(a, s) +b;
-}
-
-template<class T>
-void HH(T& a, T b, T c, T d, T x, T s, T ac){
-    a += H(b, c, d) + x + ac;
-    a = rotate_left(a, s) +b;
-}
-
-template<class T>
-void II(T& a, T b, T c, T d, T x, T s, T ac){
-    a += I(b, c, d) + x + ac;
-    a = rotate_left(a, s) +b;
-}
-
+#define S11 7
+#define S12 12
+#define S13 17
+#define S14 22
+#define S21 5
+#define S22 9
+#define S23 14
+#define S24 20
+#define S31 4
+#define S32 11
+#define S33 16
+#define S34 23
+#define S41 6
+#define S42 10
+#define S43 15
+#define S44 21
 
 /** @class md5_t
     @brief This class implements the hash algorithm described in
@@ -116,7 +102,7 @@ class md5_t
 
 public:
     // uninitialized memory
-    md5_t() {}
+    md5_t();
     ~md5_t() {}
 
     // copy and assignment
@@ -161,7 +147,26 @@ public:
 
     template<class char_t, class char_traits>
     std::basic_istream<char_t, char_traits>& get(std::basic_istream<char_t, char_traits>& is);
+
+private:
+    unsigned state[4];
+    std::size_t count[2];
+    unsigned char buffer[64];
+
+    void update(void *input, std::size_t input_length);
+    void transform(void *input);
 };
+
+inline md5_t::md5_t()
+{
+    count[0] = 0;
+    count[1] = 0;
+
+    state[0] = 0x67452301;
+    state[1] = 0xefcdab89;
+    state[2] = 0x98badcfe;
+    state[3] = 0x10325476;
+}
 
 // comparison operators define a total order
 inline bool operator==(const md5_t& lhs, const md5_t& rhs)
@@ -284,50 +289,78 @@ inline std::basic_istream<char_t, char_traits>& operator>>(std::basic_istream<ch
     return md5.get(is);
 }
 
-/*
-void update (void *input, std::size_t input_length) {
+// F, G, H and I are basic MD5 functions.
+template<class T> T F(T x, T y, T z) { return (x & y) | (~x & z); } 
+template<class T> T G(T x, T y, T z) { return (x & z) | (y & ~z); }
+template<class T> T H(T x, T y, T z) { return x ^ y ^ z; }
+template<class T> T I(T x, T y, T z) { return y ^ (x | ~z); }
 
-    uint4 input_index, buffer_index;
-    uint4 buffer_space;                // how much space is left in buffer
+// left rotation
+template<class T> T rotate_left(T x, T y) { return x << y | x >> (32 - y); }
 
-    if (finalized){  // so we can't update!
-        cerr << "MD5::update:  Can't update a finalized digest!" << endl;
-        return;
-    }
+// FF, GG, HH, and II transformations for rounds 1, 2, 3, and 4.
+// Rotation is separate from addition to prevent recomputation.
+template<class T>
+void FF(T& a, T b, T c, T d, T x, T s, T ac){
+    a += F(b, c, d) + x + ac;
+    a = rotate_left(a, s) +b;
+}
 
+template<class T>
+void GG(T& a, T b, T c, T d, T x, T s, T ac){
+    a += G(b, c, d) + x + ac;
+    a = rotate_left(a, s) +b;
+}
+
+template<class T>
+void HH(T& a, T b, T c, T d, T x, T s, T ac){
+    a += H(b, c, d) + x + ac;
+    a = rotate_left(a, s) +b;
+}
+
+template<class T>
+void II(T& a, T b, T c, T d, T x, T s, T ac){
+    a += I(b, c, d) + x + ac;
+    a = rotate_left(a, s) +b;
+}
+
+// Constants for MD5Transform routine.
+inline void md5_t::update(void *input, std::size_t input_length)
+{
     // Compute number of bytes mod 64
-    buffer_index = (unsigned int)((count[0] >> 3) & 0x3F);
+    std::size_t index = (count[0] >> 3) & 0x3F;
 
     // Update number of bits
-    if (  (count[0] += ((uint4) input_length << 3))<((uint4) input_length << 3) )
-        count[1]++;
+    std::size_t length = input_length << 3;
+    count[0] += length;
+    count[1] += count[0] < length;      // carry
+    count[1] += input_length >> 29;
 
-    count[1] += ((uint4)input_length >> 29);
-
-
-    buffer_space = 64 - buffer_index;  // how much space is left in buffer
-
+    std::size_t space = 64 - index;
+    
     // Transform as many times as possible.
-    if (input_length >= buffer_space) { // ie. we have enough to fill the buffer
+    std::size_t i = 0;
+    if (input_length >= space)
+    {
         // fill the rest of the buffer and transform
-        memcpy (buffer + buffer_index, input, buffer_space);
-        transform (buffer);
+        std::memcpy(buffer+index, input, space);
+        transform(buffer);
 
         // now, transform each 64-byte piece of the input, bypassing the buffer
-        for (input_index = buffer_space; input_index + 63 < input_length;
-                input_index += 64)
-            transform (input+input_index);
+        for (i = space; i+63 < input_length; i += 64)
+            transform(input+i);
 
-        buffer_index = 0;  // so we can buffer remaining
+        index = 0;  // so we can buffer remaining
     }
-    else
-        input_index=0;     // so we can buffer the whole input
-
 
     // and here we do the buffering:
-    memcpy(buffer+buffer_index, input+input_index, input_length-input_index);
+    memcpy(buffer+index, input+i, input_length-i);
 }
-*/
+
+inline void md5_t::transform(void *input)
+{
+
+}
 
 md5_t hash(const char *input, std::size_t input_length)
 {
