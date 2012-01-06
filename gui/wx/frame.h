@@ -13,7 +13,7 @@
     LICENSE_1_0.txt or a copy at <http://www.boost.org/LICENSE_1_0.txt>.)
 */
 
-#include "../kashmir/uuid.h"
+#include "../../kashmir/uuid.h"
 #include <sstream>
 
 #include <wx/wx.h>
