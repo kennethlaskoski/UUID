@@ -13,7 +13,7 @@
     LICENSE_1_0.txt or a copy at <http://www.boost.org/LICENSE_1_0.txt>.)
 */
 
-#include "../kashmir/devrand.h"
+#include "../../kashmir/devrand.h"
 
 #include <wx/wx.h>
 
