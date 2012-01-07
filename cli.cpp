@@ -25,8 +25,6 @@
 
 namespace
 {
-    using kashmir::uuid_t;
-    using kashmir::system::DevRand;
     using std::ostream;
     using std::ofstream;
 
@@ -62,6 +60,9 @@ namespace
 
 int main(int argc, char *argv[])
 {
+    using kashmir::uuid_t;
+    using kashmir::system::DevRand;
+
     parse_cmd_line(argc, argv);
 
     DevRand devrandom;
