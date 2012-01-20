@@ -1,10 +1,10 @@
 /********************************************************************\
- * gooid.cpp -- UUID GUI                                            *
+ * ooid.cpp -- UUID GUI                                            *
  *                                                                  *
  * Copyright (C) 2009 Kenneth Laskoski                              *
  *                                                                  *
 \********************************************************************/
-/** @file gooid.cpp
+/** @file ooid.cpp
     @brief graphical user interface to UUIDs defined by RFC 4122
     @author Copyright (C) 2009 Kenneth Laskoski
 
