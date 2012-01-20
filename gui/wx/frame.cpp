@@ -19,7 +19,7 @@
 enum
 {
     v4uuidgenID = 101,
-    md5uuidgenID = 102,
+    md5uuidgenID,
     niluuidgenID,
 };
 
