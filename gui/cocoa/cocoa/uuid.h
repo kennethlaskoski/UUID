@@ -13,4 +13,6 @@
 + (NSString *) generateNIL;
 + (NSString *) generateV4;
 
++ (NSString *) serialize;
+
 @end
