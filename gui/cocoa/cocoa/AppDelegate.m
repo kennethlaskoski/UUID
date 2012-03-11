@@ -8,6 +8,8 @@
 
 #import "AppDelegate.h"
 
+#import "uuid.h"
+
 @implementation AppDelegate
 
 @synthesize window = _window;
@@ -18,11 +20,20 @@
     // Insert code here to initialize your application
 }
 
-- (IBAction)generateNIL:(id)sender {
-    [self.textField setStringValue:@"NIL"];
+- (IBAction)generateNIL:(id)sender
+{
+    NSMutableString *tmp = [self.textField.stringValue mutableCopy];
+    [tmp appendString:[UUID generateNIL]];
+    [tmp appendString:@"\n"];
+    [self.textField setStringValue:tmp];
 }
 
-- (IBAction)generateV4:(id)sender {
-    [self.textField setStringValue:@"V4"];
+- (IBAction)generateV4:(id)sender
+{
+    NSMutableString *tmp = [self.textField.stringValue mutableCopy];
+    [tmp appendString:[UUID generateV4]];
+    [tmp appendString:@"\n"];
+    [self.textField setStringValue:tmp];
 }
+
 @end
