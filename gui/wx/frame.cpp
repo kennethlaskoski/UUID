@@ -56,11 +56,11 @@ Frame::Frame(const wxString& title)
 
 void Frame::generate_nil_uuid(wxCommandEvent&)
 {
-    static const kashmir::uuid_t nil;
+    /* static memory should be zeroed */
+    static const kashmir::uuid_t null;
+    assert(!null);
 
-    assert(!nil);
-
-    buffer << nil << '\n';
+    buffer << null << '\n';
 
     result->AppendText(buffer.str());
     buffer.str(L"");
