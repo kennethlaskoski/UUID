@@ -15,29 +15,33 @@
 
 @implementation UUID
 
+static kashmir::uuid_t uuid;
+
 + (NSString *) generateNIL
 {
     /* static memory should be zeroed */
     static const kashmir::uuid_t null;
     assert(!null);
     
-    std::stringstream buffer;
-    buffer << null;
-
-    return [NSString stringWithUTF8String:buffer.str().c_str()];
+    uuid = null;
+    return [self serialize];
 }
 
 + (NSString *) generateV4
 {
     static kashmir::system::DevRand devrandom;
-    static kashmir::uuid_t uuid;
 
     devrandom >> uuid;
-    
+
+    return [self serialize];
+}
+
++ (NSString *) serialize
+{
     std::stringstream buffer;
     buffer << uuid;
     
-    return [NSString stringWithUTF8String:buffer.str().c_str()];
+    return [NSString stringWithUTF8String:buffer.str().c_str()];    
 }
 
 @end
