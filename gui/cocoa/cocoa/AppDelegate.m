@@ -12,8 +12,9 @@
 
 @implementation AppDelegate
 
-@synthesize window = _window;
 @synthesize textField = _textField;
+
+@synthesize window = _window;
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification
 {
