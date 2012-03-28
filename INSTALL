@@ -13,8 +13,8 @@ In particular, we do not provide direct access to the internal data.
 The following code helps generate version 4 UUIDs, and may as well be useful
 in other contexts.
 
-* devrandom.h : provides a random stream using the /dev/random file nowadays
-implemented in many UNIX flavors.
+* devrandom.h : provides a random stream using the /dev/random file present
+in many UNIX implementations.
 
 * devrand.h : same as above, but uses the non-blocking /dev/urandom file.
 
