@@ -17,7 +17,7 @@
 namespace kashmir {
 namespace unique_ADL_fence {
 
-// CRTP allows better EBO
+// CRTP allows better empty base optimization
 template<class CRTP>
 class unique
 {
