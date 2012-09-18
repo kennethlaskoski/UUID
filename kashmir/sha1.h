@@ -1,18 +1,18 @@
-// md5.h -- hash algorithm described in IETF RFC 1321
+// sha1.h -- hash algorithm described in FIPS 180-1
 
-// Copyright (C) 2010 Kenneth Laskoski
+// Copyright (C) 2012 Kenneth Laskoski
 
-/** @file md5.h
-    @brief hash algorithm described in IETF RFC 1321
-    @author Copyright (C) 2010 Kenneth Laskoski
+/** @file sha1.h
+    @brief hash algorithm described in FIPS 180-1
+    @author Copyright (C) 2012 Kenneth Laskoski
 
     Use, modification, and distribution are subject to the
     Boost Software License, Version 1.0. See accompanying file
     LICENSE_1_0.txt or <http://www.boost.org/LICENSE_1_0.txt>.
 */
 
-#ifndef KL_MD5_H
-#define KL_MD5_H 
+#ifndef KL_SHA1_H
+#define KL_SHA1_H 
 
 #include "array.h"
 
@@ -25,46 +25,46 @@
 #include "iostate.h"
 
 namespace kashmir {
-namespace md5 {
+namespace sha1 {
 
-/** @class md5_t
+/** @class sha1_t
     @brief This class implements the data product of the hash algorithm described in
     
-    - IETF RFC 1321 - available at http://tools.ietf.org/html/rfc1321
+    - FIPS 180-1 - available at http://www.itl.nist.gov/fipspubs/fip180-1.htm
 
     This documents the code below.
 */
 
-class md5_t
+class sha1_t
 {
-    // an MD5 is a string of 16 octets (128 bits)
+    // an SHA-1 is a string of 20 octets (160 bits)
     // we use an unpacked representation, value_type may be larger than 8 bits,
     // in which case every input operation must assert data[i] < 256 for i < 16
     // note even char may be more than 8 bits in some particular platform
     typedef unsigned char value_type;
     typedef std::size_t size_type;
 
-    static const size_type size = 16, string_size = 32;
+    static const size_type size = 20, string_size = 40;
 
     typedef array<value_type, size> data_type;
     data_type data;
 
 public:
     // uninitialized memory
-    md5_t() {}
-    ~md5_t() {}
+    sha1_t() {}
+    ~sha1_t() {}
 
     // copy and assignment
-    md5_t(const md5_t& rhs) : data(rhs.data) {}
+    sha1_t(const sha1_t& rhs) : data(rhs.data) {}
 
-    md5_t& operator=(const md5_t& rhs)
+    sha1_t& operator=(const sha1_t& rhs)
     {
         data = rhs.data;
         return *this;
     }
 
     // initialization from C string
-    explicit md5_t(const char* string)
+    explicit sha1_t(const char* string)
     {
         std::stringstream stream(string);
         get(stream);
@@ -80,15 +80,15 @@ public:
     }
 
     // safe bool idiom
-    typedef data_type md5_t::*bool_type; 
+    typedef data_type sha1_t::*bool_type; 
 
     operator bool_type() const
     {
-        return is_nil() ? 0 : &md5_t::data;
+        return is_nil() ? 0 : &sha1_t::data;
     }
 
-    friend bool operator==(const md5_t& lhs, const md5_t& rhs);
-    friend bool operator<(const md5_t& lhs, const md5_t& rhs);
+    friend bool operator==(const sha1_t& lhs, const sha1_t& rhs);
+    friend bool operator<(const sha1_t& lhs, const sha1_t& rhs);
 
     // stream operators
     template<class char_t, class char_traits>
@@ -99,23 +99,23 @@ public:
 };
 
 // comparison operators define a total order
-inline bool operator==(const md5_t& lhs, const md5_t& rhs)
+inline bool operator==(const sha1_t& lhs, const sha1_t& rhs)
 {
     return lhs.data == rhs.data;
 }
 
-inline bool operator<(const md5_t& lhs, const md5_t& rhs)
+inline bool operator<(const sha1_t& lhs, const sha1_t& rhs)
 {
     return lhs.data < rhs.data;
 }
 
-inline bool operator>(const md5_t& lhs, const md5_t& rhs) { return (rhs < lhs); }
-inline bool operator<=(const md5_t& lhs, const md5_t& rhs) { return !(rhs < lhs); }
-inline bool operator>=(const md5_t& lhs, const md5_t& rhs) { return !(lhs < rhs); }
-inline bool operator!=(const md5_t& lhs, const md5_t& rhs) { return !(lhs == rhs); }
+inline bool operator>(const sha1_t& lhs, const sha1_t& rhs) { return (rhs < lhs); }
+inline bool operator<=(const sha1_t& lhs, const sha1_t& rhs) { return !(rhs < lhs); }
+inline bool operator>=(const sha1_t& lhs, const sha1_t& rhs) { return !(lhs < rhs); }
+inline bool operator!=(const sha1_t& lhs, const sha1_t& rhs) { return !(lhs == rhs); }
 
 template<class char_t, class char_traits>
-std::basic_ostream<char_t, char_traits>& md5_t::put(std::basic_ostream<char_t, char_traits>& os) const
+std::basic_ostream<char_t, char_traits>& sha1_t::put(std::basic_ostream<char_t, char_traits>& os) const
 {
     if (!os.good())
         return os;
@@ -153,7 +153,7 @@ std::basic_ostream<char_t, char_traits>& md5_t::put(std::basic_ostream<char_t, c
 }
 
 template<class char_t, class char_traits>
-std::basic_istream<char_t, char_traits>& md5_t::get(std::basic_istream<char_t, char_traits>& is)
+std::basic_istream<char_t, char_traits>& sha1_t::get(std::basic_istream<char_t, char_traits>& is)
 {
     if (!is.good())
         return is;
@@ -201,27 +201,27 @@ std::basic_istream<char_t, char_traits>& md5_t::get(std::basic_istream<char_t, c
         }
 
         if (!is)
-            throw std::runtime_error("failed to extract valid md5 from stream.");
+            throw std::runtime_error("failed to extract valid sha1 from stream.");
     }
 
     return is;
 }
 
 template<class char_t, class char_traits>
-inline std::basic_ostream<char_t, char_traits>& operator<<(std::basic_ostream<char_t, char_traits>& os, const md5_t& md5)
+inline std::basic_ostream<char_t, char_traits>& operator<<(std::basic_ostream<char_t, char_traits>& os, const sha1_t& sha1)
 {
-    return md5.put(os);
+    return sha1.put(os);
 }
 
 template<class char_t, class char_traits>
-inline std::basic_istream<char_t, char_traits>& operator>>(std::basic_istream<char_t, char_traits>& is, md5_t& md5)
+inline std::basic_istream<char_t, char_traits>& operator>>(std::basic_istream<char_t, char_traits>& is, sha1_t& sha1)
 {
-    return md5.get(is);
+    return sha1.get(is);
 }
 
-} // namespace kashmir::md5
+} // namespace kashmir::sha1
 
-using md5::md5_t;
+using sha1::sha1_t;
 
 } // namespace kashmir
 

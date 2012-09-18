@@ -12,27 +12,24 @@
 */
 
 #ifndef KL_UUID_H
-#define KL_UUID_H 
+#define KL_UUID_H
 
 #include "array.h"
 
 #include <istream>
 #include <ostream>
 #include <sstream>
-#include "randomstream.h"
-
-#include <cstddef>
 
 #include <stdexcept>
-#include <algorithm>
 
 #include "iostate.h"
+#include "randomstream.h"
 
 namespace kashmir {
 namespace uuid {
 
 /** @class uuid_t
-    @brief This class provides a C++ binding to the UUID type defined in
+    @brief This class is a C++ concrete type representing the UUID defined in
     - ISO/IEC 9834-8:2005 | ITU-T Rec. X.667 - available at http://www.itu.int/ITU-T/studygroups/com17/oid.html
     - IETF RFC 4122 - available at http://tools.ietf.org/html/rfc4122
 
@@ -48,7 +45,7 @@ class uuid_t
     typedef unsigned char value_type;
     typedef std::size_t size_type;
 
-    enum { size = 16, string_size = 36 };
+    static const size_type size = 16, string_size = 36;
 
     typedef array<value_type, size> data_type;
     data_type data;
@@ -145,7 +142,7 @@ std::basic_ostream<char_t, char_traits>& uuid_t::put(std::basic_ostream<char_t, 
         os << std::hex;
         os.fill(os.widen('0'));
 
-        for (size_t i = 0; i < 16; ++i)
+        for (size_t i = 0; i < size; ++i)
         {
             os.width(2);
             os << static_cast<unsigned>(data[i]);
@@ -232,7 +229,7 @@ user::randomstream<user_impl>& uuid_t::get(user::randomstream<user_impl>& is)
 {
     // get random bytes
 
-    // RAE: we take advantage of our representation
+    // we take advantage of our representation
     is.read(reinterpret_cast<char*>(this), size);
 
     // a more general solution would be

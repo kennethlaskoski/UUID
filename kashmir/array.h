@@ -14,7 +14,6 @@
 #ifndef KL_ARRAY_H
 #define KL_ARRAY_H
 
-#include <cstddef>
 #include <algorithm>
 
 namespace kashmir {
