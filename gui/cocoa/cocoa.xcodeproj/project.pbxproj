@@ -163,7 +163,7 @@
 		9F87BD3F1507324900C9FB7F /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0430;
+				LastUpgradeCheck = 0450;
 			};
 			buildConfigurationList = 9F87BD421507324900C9FB7F /* Build configuration list for PBXProject "cocoa" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -286,6 +286,7 @@
 		9F87BD671507324A00C9FB7F /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "cocoa/cocoa-Prefix.pch";
 				INFOPLIST_FILE = "cocoa/cocoa-Info.plist";
@@ -297,6 +298,7 @@
 		9F87BD681507324A00C9FB7F /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "cocoa/cocoa-Prefix.pch";
 				INFOPLIST_FILE = "cocoa/cocoa-Info.plist";
