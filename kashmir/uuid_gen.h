@@ -17,7 +17,7 @@ namespace kashmir {
 namespace uuid {
 
 template<class user_impl>
-inline user::randomstream<user_impl>& operator>>(user::randomstream<user_impl>& is, uuid_t& uuid)
+user::randomstream<user_impl>& operator>>(user::randomstream<user_impl>& is, uuid_t& uuid)
 {
     // get random bytes
     // we take advantage of our representation
