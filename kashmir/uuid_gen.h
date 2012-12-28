@@ -47,6 +47,9 @@ user::randomstream<user_impl>& operator>>(user::randomstream<user_impl>& is, uui
     return is;
 }
 
+void cast_md5(uuid_t& uuid);
+void cast_sha1(uuid_t& uuid);
+
 } // namespace kashmir::uuid
 } // namespace kashmir
 
