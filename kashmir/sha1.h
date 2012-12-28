@@ -5,10 +5,6 @@
 /** @file sha1.h
     @brief hash algorithm described in FIPS 180-1
     @author Copyright (C) 2012 Kenneth Laskoski
-
-    Use, modification, and distribution are subject to the
-    Boost Software License, Version 1.0. See accompanying file
-    LICENSE_1_0.txt or <http://www.boost.org/LICENSE_1_0.txt>.
 */
 
 #ifndef KL_SHA1_H
@@ -35,17 +31,17 @@ namespace sha1 {
     This documents the code below.
 */
 
+// an SHA-1 is a string of 20 octets (160 bits)
+// we use an unpacked representation, value_type may be larger than 8 bits,
+// in which case every input operation must assert data[i] < 256 for i < 16
+// note even char may be more than 8 bits in some particular platform
+typedef unsigned char value_type;
+typedef std::size_t size_type;
+
+const size_type size = 20, string_size = 40;
+
 class sha1_t
 {
-    // an SHA-1 is a string of 20 octets (160 bits)
-    // we use an unpacked representation, value_type may be larger than 8 bits,
-    // in which case every input operation must assert data[i] < 256 for i < 16
-    // note even char may be more than 8 bits in some particular platform
-    typedef unsigned char value_type;
-    typedef std::size_t size_type;
-
-    static const size_type size = 20, string_size = 40;
-
     typedef array<value_type, size> data_type;
     data_type data;
 
