@@ -5,10 +5,6 @@
 /** @file md5.h
     @brief hash algorithm described in IETF RFC 1321
     @author Copyright (C) 2010 Kenneth Laskoski
-
-    Use, modification, and distribution are subject to the
-    Boost Software License, Version 1.0. See accompanying file
-    LICENSE_1_0.txt or <http://www.boost.org/LICENSE_1_0.txt>.
 */
 
 #ifndef KL_MD5_H
@@ -35,17 +31,17 @@ namespace md5 {
     This documents the code below.
 */
 
+// an MD5 is a string of 16 octets (128 bits)
+// we use an unpacked representation, value_type may be larger than 8 bits,
+// in which case every input operation must assert data[i] < 256 for i < 16
+// note even char may be more than 8 bits in some particular platform
+typedef unsigned char value_type;
+typedef std::size_t size_type;
+
+const size_type size = 16, string_size = 32;
+
 class md5_t
 {
-    // an MD5 is a string of 16 octets (128 bits)
-    // we use an unpacked representation, value_type may be larger than 8 bits,
-    // in which case every input operation must assert data[i] < 256 for i < 16
-    // note even char may be more than 8 bits in some particular platform
-    typedef unsigned char value_type;
-    typedef std::size_t size_type;
-
-    static const size_type size = 16, string_size = 32;
-
     typedef array<value_type, size> data_type;
     data_type data;
 
