@@ -30,7 +30,7 @@
 namespace kashmir {
 namespace system {
 
-class WinRandom : public user::randomstream<WinRandom>, unique<WinRandom>
+class WinRandom : public randomstream<WinRandom>, unique<WinRandom>
 {
     HCRYPTPROV hProv;
 
