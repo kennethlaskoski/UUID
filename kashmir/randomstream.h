@@ -1,16 +1,10 @@
-/********************************************************************\
- * randomstream.h -- random number generator                        *
- *                                                                  *
- * Copyright (C) 2009 Kenneth Laskoski                              *
- *                                                                  *
-\********************************************************************/
-/** @file randomstream.h
-    @brief random number generator
-    @author Copyright (C) 2008 Kenneth Laskoski
+// randomstream.h -- random number stream
 
-    Use, modification, and distribution are subject
-    to the Boost Software License, Version 1.0.  (See accompanying file
-    LICENSE_1_0.txt or a copy at <http://www.boost.org/LICENSE_1_0.txt>.)
+// Copyright (C) 2008 Kenneth Laskoski
+
+/** @file randomstream.h
+    @brief random number stream
+    @author Copyright (C) 2008 Kenneth Laskoski
 */
 
 #ifndef KL_RANDOMSTREAM_H
@@ -19,7 +13,6 @@
 #include <cstddef>
 
 namespace kashmir {
-namespace user {
 
 template<class user_impl>
 class randomstream
@@ -54,6 +47,6 @@ public:
     randomstream<user_impl>& operator>>(void*& p) { read(reinterpret_cast<char*>(&p), sizeof(void*)); return *this; }
 };
 
-}}
+} // namespace kashmir
 
 #endif
