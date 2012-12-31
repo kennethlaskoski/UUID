@@ -5,10 +5,6 @@
 /** @file array.h
     @brief STL container interface to arrays
     @author Copyright (C) 2009 Kenneth Laskoski
-
-    Use, modification, and distribution are subject to the
-    Boost Software License, Version 1.0. See accompanying file
-    LICENSE_1_0.txt or <http://www.boost.org/LICENSE_1_0.txt>.
 */
 
 #ifndef KL_ARRAY_H

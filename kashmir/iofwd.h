@@ -63,6 +63,6 @@ class ios_iword_saver;
 class ios_pword_saver;
 class ios_all_word_saver;
 
-}
+} // namespace kashmir
 
 #endif
