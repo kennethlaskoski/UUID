@@ -14,6 +14,7 @@
 
 namespace kashmir {
 
+// CRTP stands for curiously recurring template pattern
 template<class crtp_impl>
 class randomstream
 {
