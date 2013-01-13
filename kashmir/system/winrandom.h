@@ -17,8 +17,8 @@
 #ifndef KL_WINRANDOM_H 
 #define KL_WINRANDOM_H 
 
-#include "randomstream.h"
-#include "unique.h"
+#include "../randomstream.h"
+#include "../unique.h"
 
 #include <stdexcept>
 

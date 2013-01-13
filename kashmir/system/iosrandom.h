@@ -10,8 +10,8 @@
 #ifndef KL_IOSRANDOM_H 
 #define KL_IOSRANDOM_H 
 
-#include "randomstream.h"
-#include "unique.h"
+#include "../randomstream.h"
+#include "../unique.h"
 
 #include <stdexcept>
 
