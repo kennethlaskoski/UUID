@@ -84,7 +84,6 @@ public:
     }
 
     friend bool operator==(const sha1_t& lhs, const sha1_t& rhs);
-    friend bool operator<(const sha1_t& lhs, const sha1_t& rhs);
 
     // stream operators
     template<class char_t, class char_traits>
@@ -94,20 +93,12 @@ public:
     std::basic_istream<char_t, char_traits>& get(std::basic_istream<char_t, char_traits>& is);
 };
 
-// comparison operators define a total order
+// comparison operators are restricted to equality
 inline bool operator==(const sha1_t& lhs, const sha1_t& rhs)
 {
     return lhs.data == rhs.data;
 }
 
-inline bool operator<(const sha1_t& lhs, const sha1_t& rhs)
-{
-    return lhs.data < rhs.data;
-}
-
-inline bool operator>(const sha1_t& lhs, const sha1_t& rhs) { return (rhs < lhs); }
-inline bool operator<=(const sha1_t& lhs, const sha1_t& rhs) { return !(rhs < lhs); }
-inline bool operator>=(const sha1_t& lhs, const sha1_t& rhs) { return !(lhs < rhs); }
 inline bool operator!=(const sha1_t& lhs, const sha1_t& rhs) { return !(lhs == rhs); }
 
 template<class char_t, class char_traits>
