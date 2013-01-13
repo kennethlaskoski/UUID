@@ -30,6 +30,7 @@ namespace
     using std::ofstream;
 
     int n = 1;
+    int v = 4;
 
     ostream* outp = &std::cout;
     ofstream ofile;
@@ -39,17 +40,23 @@ namespace
         int ch;
         char *p;
 
-        while ((ch = getopt(argc, argv, "n:o:")) != -1) {
+        while ((ch = getopt(argc, argv, "n:o:v:")) != -1) {
             switch (ch) {
                 case 'n':
                     n = strtoul(optarg, &p, 10);
                     if (*p != '\0' || n < 1)
-                        std::cerr << "invalid argument to option 'n'\n";
+                        std::cerr << "invalid argument for option 'n'\n";
                     break;
                 case 'o':
                     ofile.open(optarg);
                     outp = &ofile;
                     break;
+                case 'v':
+                    v = strtoul(optarg, &p, 10);
+                    if (*p == '\0' && (3 <= v && v <= 5))
+                        break;
+                    std::cerr << "invalid argument for option 'v'\n";
+                    // fall through
                 default:
                     exit(1);
             }
