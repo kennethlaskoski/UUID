@@ -10,8 +10,8 @@
 #ifndef KL_DEVRANDOM_H 
 #define KL_DEVRANDOM_H 
 
-#include "randomstream.h"
-#include "unique.h"
+#include "../randomstream.h"
+#include "../unique.h"
 
 #include <fstream>
 #include <stdexcept>

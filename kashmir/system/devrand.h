@@ -14,8 +14,8 @@
 #ifndef KL_DEVRAND_H 
 #define KL_DEVRAND_H 
 
-#include "randomstream.h"
-#include "unique.h"
+#include "../randomstream.h"
+#include "../unique.h"
 
 #include <fstream>
 #include <stdexcept>
