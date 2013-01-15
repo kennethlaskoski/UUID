@@ -13,6 +13,8 @@
 #include "uuid.h"
 #include "randomstream.h"
 
+#include <memory>
+
 namespace kashmir {
 namespace uuid {
 
@@ -45,6 +47,14 @@ randomstream<crtp_impl>& operator>>(randomstream<crtp_impl>& is, uuid_t& uuid)
     data[6] |= 0x40;   // 0b01000000
 
     return is;
+}
+
+template<class crtp_impl>
+std::auto_ptr<uuid_t> uuid_gen(randomstream<crtp_impl>& is)
+{
+    uuid_t *uuid = new uuid_t;
+    is >> *uuid;
+    return std::auto_ptr<uuid_t>(uuid);
 }
 
 void cast_md5(uuid_t& uuid);
