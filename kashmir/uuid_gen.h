@@ -16,8 +16,8 @@
 namespace kashmir {
 namespace uuid {
 
-template<class user_impl>
-randomstream<user_impl>& operator>>(randomstream<user_impl>& is, uuid_t& uuid)
+template<class crtp_impl>
+randomstream<crtp_impl>& operator>>(randomstream<crtp_impl>& is, uuid_t& uuid)
 {
     // get random bytes
     // we take advantage of our representation
