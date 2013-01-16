@@ -49,12 +49,13 @@ randomstream<crtp_impl>& operator>>(randomstream<crtp_impl>& is, uuid_t& uuid)
     return is;
 }
 
+// move constructor
 template<class crtp_impl>
 std::auto_ptr<uuid_t> uuid_gen(randomstream<crtp_impl>& is)
 {
-    uuid_t *uuid = new uuid_t;
-    is >> *uuid;
-    return std::auto_ptr<uuid_t>(uuid);
+    std::auto_ptr<uuid_t> uuid_ptr(new uuid_t);
+    is >> *uuid_ptr;
+    return uuid_ptr;
 }
 
 void cast_md5(uuid_t& uuid);
