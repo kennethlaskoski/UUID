@@ -15,6 +15,7 @@
     LICENSE_1_0.txt or a copy at <http://www.boost.org/LICENSE_1_0.txt>.)
 */
 
+#include "kashmir/md5.h"
 #include "kashmir/uuid_gen.h"
 #include "kashmir/system/devrand.h"
 
@@ -67,11 +68,19 @@ namespace
 
 int main(int argc, char *argv[])
 {
+    using kashmir::md5_t;
+
     using kashmir::uuid::uuid_gen;
     using kashmir::system::DevRand;
 
     parse_cmd_line(argc, argv);
     ostream& out = *outp;
+
+    if (v == 3)
+    {
+        out << md5_t() << '\n';
+        return 0;
+    }
 
     DevRand devrand;
     for (int i = 0; i < n; i++)
