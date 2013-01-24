@@ -11,6 +11,8 @@
 #define KL_UUID_GEN_H
 
 #include "uuid.h"
+#include "md5_gen.h"
+#include "sha1_gen.h"
 #include "randomstream.h"
 
 namespace kashmir {
@@ -55,8 +57,53 @@ uuid_t uuid_gen(randomstream<crtp_impl>& is)
     return uuid;
 }
 
-void cast_md5(uuid_t& uuid);
-void cast_sha1(uuid_t& uuid);
+template<class crtp_impl>
+uuid_t uuid_gen(md5::engine<crtp_impl>& md5engine, const uuid_t& nameSpace, const std::string& name)
+{
+    md5engine.update(reinterpret_cast<const char *const>(&nameSpace), 16);
+    md5engine.update(name.c_str(), name.size());
+
+    kashmir::md5_t md5 = md5engine();
+
+    kashmir::uuid_t& uuid = *(reinterpret_cast<kashmir::uuid_t*>(&md5));
+    unsigned char *const data = reinterpret_cast<unsigned char *const>(&uuid);
+
+    // set variant
+    // should be 0b10xxxxxx
+    data[8] &= 0xbf;   // 0b10111111
+    data[8] |= 0x80;   // 0b10000000
+
+    // set version
+    // should be 0b0011xxxx
+    data[6] &= 0x3f;   // 0b00111111
+    data[6] |= 0x30;   // 0b00110000
+
+    return uuid;
+}
+
+template<class crtp_impl>
+uuid_t uuid_gen(sha1::engine<crtp_impl>& sha1engine, const uuid_t& nameSpace, const std::string& name)
+{
+    sha1engine.update(reinterpret_cast<const char *const>(&nameSpace), 16);
+    sha1engine.update(name.c_str(), name.size());
+
+    kashmir::sha1_t sha1 = sha1engine();
+
+    kashmir::uuid_t& uuid = *(reinterpret_cast<kashmir::uuid_t*>(&sha1));
+    unsigned char *const data = reinterpret_cast<unsigned char *const>(&uuid);
+
+    // set variant
+    // should be 0b10xxxxxx
+    data[8] &= 0xbf;   // 0b10111111
+    data[8] |= 0x80;   // 0b10000000
+
+    // set version
+    // should be 0b0101xxxx
+    data[6] &= 0x5f;   // 0b01011111
+    data[6] |= 0x50;   // 0b01010000
+
+    return uuid;
+}
 
 } // namespace kashmir::uuid
 } // namespace kashmir

@@ -16,12 +16,12 @@ namespace kashmir {
 namespace sha1 {
 
 template<class crtp_impl>
-class sha1_genie
+class engine
 {
     crtp_impl* const self;
 
 public:
-    sha1_genie<crtp_impl>() : self(static_cast<crtp_impl*>(this)) {}
+    engine<crtp_impl>() : self(static_cast<crtp_impl*>(this)) {}
 
     void update(const char* const source, std::size_t count)
     {

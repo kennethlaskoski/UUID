@@ -21,7 +21,7 @@
 namespace kashmir {
 namespace system {
 
-class ccsha1 : public sha1::sha1_genie<ccsha1>, unique<ccsha1>
+class ccsha1 : public sha1::engine<ccsha1>, unique<ccsha1>
 {
     CC_SHA1_CTX ctx;
 

@@ -21,7 +21,7 @@
 namespace kashmir {
 namespace system {
 
-class ccmd5 : public md5::md5_genie<ccmd5>, unique<ccmd5>
+class ccmd5 : public md5::engine<ccmd5>, unique<ccmd5>
 {
     CC_MD5_CTX ctx;
 
