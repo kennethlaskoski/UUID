@@ -16,12 +16,12 @@ namespace kashmir {
 namespace md5 {
 
 template<class crtp_impl>
-class md5_genie
+class engine
 {
     crtp_impl* const self;
 
 public:
-    md5_genie<crtp_impl>() : self(static_cast<crtp_impl*>(this)) {}
+    engine<crtp_impl>() : self(static_cast<crtp_impl*>(this)) {}
 
     void update(const char* const source, std::size_t count)
     {
