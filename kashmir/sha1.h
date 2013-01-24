@@ -1,9 +1,9 @@
-// sha1.h -- hash algorithm described in FIPS 180-1
+// sha1.h -- hash algorithm data product described in FIPS 180-1
 
 // Copyright (C) 2012 Kenneth Laskoski
 
 /** @file sha1.h
-    @brief hash algorithm described in FIPS 180-1
+    @brief hash algorithm data product described in FIPS 180-1
     @author Copyright (C) 2012 Kenneth Laskoski
 */
 
@@ -35,6 +35,7 @@ namespace sha1 {
 // we use an unpacked representation, value_type may be larger than 8 bits,
 // in which case every input operation must assert data[i] < 256 for i < 16
 // note even char may be more than 8 bits in some particular platform
+
 typedef unsigned char value_type;
 typedef std::size_t size_type;
 
@@ -46,19 +47,19 @@ class sha1_t
     data_type data;
 
 public:
-    // uninitialized memory
+    // we keep data uninitialized to stress concreteness
     sha1_t() {}
     ~sha1_t() {}
 
-    // copy and assignment
+    // trivial copy and assignment
     sha1_t(const sha1_t& rhs) : data(rhs.data) {}
-
     sha1_t& operator=(const sha1_t& rhs)
     {
         data = rhs.data;
         return *this;
     }
 
+    // OK, now we bow to convenience
     // initialization from C string
     explicit sha1_t(const char* string)
     {
@@ -77,13 +78,16 @@ public:
 
     // safe bool idiom
     typedef data_type sha1_t::*bool_type; 
-
     operator bool_type() const
     {
         return is_nil() ? 0 : &sha1_t::data;
     }
 
-    friend bool operator==(const sha1_t& lhs, const sha1_t& rhs);
+    // only equality makes sense here
+    bool operator==(const sha1_t& rhs) const
+    {
+        return data == rhs.data;
+    }
 
     // stream operators
     template<class char_t, class char_traits>
@@ -93,12 +97,7 @@ public:
     std::basic_istream<char_t, char_traits>& get(std::basic_istream<char_t, char_traits>& is);
 };
 
-// comparison operators are restricted to equality
-inline bool operator==(const sha1_t& lhs, const sha1_t& rhs)
-{
-    return lhs.data == rhs.data;
-}
-
+// only equality makes sense here
 inline bool operator!=(const sha1_t& lhs, const sha1_t& rhs) { return !(lhs == rhs); }
 
 template<class char_t, class char_traits>

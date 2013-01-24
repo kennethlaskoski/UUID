@@ -34,7 +34,8 @@ namespace uuid {
 // an UUID is a string of 16 octets (128 bits)
 // we use an unpacked representation, value_type may be larger than 8 bits,
 // in which case every input operation must assert data[i] < 256 for i < 16
-// note even char may be more than 8 bits in some particular platform
+// note that even char may be more than 8 bits in some particular platform
+
 typedef unsigned char value_type;
 typedef std::size_t size_type;
 
@@ -46,19 +47,19 @@ class uuid_t
     data_type data;
 
 public:
-    // uninitialized memory
+    // we keep data uninitialized to stress concreteness
     uuid_t() {}
     ~uuid_t() {}
 
-    // copy and assignment
+    // trivial copy and assignment
     uuid_t(const uuid_t& rhs) : data(rhs.data) {}
-
     uuid_t& operator=(const uuid_t& rhs)
     {
         data = rhs.data;
         return *this;
     }
 
+    // OK, now we bow to convenience
     // initialization from C string
     explicit uuid_t(const char* string)
     {
@@ -77,14 +78,20 @@ public:
 
     // safe bool idiom
     typedef data_type uuid_t::*bool_type; 
-
     operator bool_type() const
     {
         return is_nil() ? 0 : &uuid_t::data;
     }
 
-    friend bool operator==(const uuid_t& lhs, const uuid_t& rhs);
-    friend bool operator<(const uuid_t& lhs, const uuid_t& rhs);
+    // comparison operators define a total order
+    bool operator==(const uuid_t& rhs) const
+    {
+        return data == rhs.data;
+    }
+    bool operator<(const uuid_t& rhs) const
+    {
+        return data < rhs.data;
+    }
 
     // stream operators
     template<class char_t, class char_traits>
@@ -95,16 +102,6 @@ public:
 };
 
 // comparison operators define a total order
-inline bool operator==(const uuid_t& lhs, const uuid_t& rhs)
-{
-    return lhs.data == rhs.data;
-}
-
-inline bool operator<(const uuid_t& lhs, const uuid_t& rhs)
-{
-    return lhs.data < rhs.data;
-}
-
 inline bool operator>(const uuid_t& lhs, const uuid_t& rhs) { return (rhs < lhs); }
 inline bool operator<=(const uuid_t& lhs, const uuid_t& rhs) { return !(rhs < lhs); }
 inline bool operator>=(const uuid_t& lhs, const uuid_t& rhs) { return !(lhs < rhs); }

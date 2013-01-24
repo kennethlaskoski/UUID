@@ -1,9 +1,9 @@
-// md5.h -- hash algorithm described in IETF RFC 1321
+// md5.h -- hash algorithm data product described in IETF RFC 1321
 
 // Copyright (C) 2010 Kenneth Laskoski
 
 /** @file md5.h
-    @brief hash algorithm described in IETF RFC 1321
+    @brief hash algorithm data product described in IETF RFC 1321
     @author Copyright (C) 2010 Kenneth Laskoski
 */
 
@@ -34,7 +34,8 @@ namespace md5 {
 // an MD5 is a string of 16 octets (128 bits)
 // we use an unpacked representation, value_type may be larger than 8 bits,
 // in which case every input operation must assert data[i] < 256 for i < 16
-// note even char may be more than 8 bits in some particular platform
+// note that even char may be more than 8 bits in some particular platform
+
 typedef unsigned char value_type;
 typedef std::size_t size_type;
 
@@ -46,19 +47,19 @@ class md5_t
     data_type data;
 
 public:
-    // uninitialized memory
+    // we keep data uninitialized to stress concreteness
     md5_t() {}
     ~md5_t() {}
 
-    // copy and assignment
+    // trivial copy and assignment
     md5_t(const md5_t& rhs) : data(rhs.data) {}
-
     md5_t& operator=(const md5_t& rhs)
     {
         data = rhs.data;
         return *this;
     }
 
+    // OK, now we bow to convenience
     // initialization from C string
     explicit md5_t(const char* string)
     {
@@ -77,13 +78,16 @@ public:
 
     // safe bool idiom
     typedef data_type md5_t::*bool_type; 
-
     operator bool_type() const
     {
         return is_nil() ? 0 : &md5_t::data;
     }
 
-    friend bool operator==(const md5_t& lhs, const md5_t& rhs);
+    // only equality makes sense here
+    bool operator==(const md5_t& rhs) const
+    {
+        return data == rhs.data;
+    }
 
     // stream operators
     template<class char_t, class char_traits>
@@ -93,12 +97,7 @@ public:
     std::basic_istream<char_t, char_traits>& get(std::basic_istream<char_t, char_traits>& is);
 };
 
-// comparison operators are restricted to equality
-inline bool operator==(const md5_t& lhs, const md5_t& rhs)
-{
-    return lhs.data == rhs.data;
-}
-
+// only equality makes sense here
 inline bool operator!=(const md5_t& lhs, const md5_t& rhs) { return !(lhs == rhs); }
 
 template<class char_t, class char_traits>
