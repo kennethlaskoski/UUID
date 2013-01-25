@@ -27,7 +27,7 @@ class iOSRandom : public randomstream<iOSRandom>, unique<iOSRandom>
 public:
     iOSRandom(SecRandomRef ref=kSecRandomDefault) : ref(ref) {}
 
-    void read(char* buffer, std::size_t count)
+    void read(char *buffer, std::size_t count)
     {
         if (SecRandomCopyBytes(ref, count, reinterpret_cast<uint8_t*>(buffer)))
             throw std::runtime_error("system failed to generate random data.");

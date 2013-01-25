@@ -18,12 +18,12 @@ namespace kashmir {
 template<class crtp_impl>
 class randomstream
 {
-    crtp_impl* const self;
+    crtp_impl *const self;
 
 public:
     randomstream<crtp_impl>() : self(static_cast<crtp_impl*>(this)) {}
 
-    void read(char* buffer, std::size_t count)
+    void read(char *buffer, std::size_t count)
     {
         self->read(buffer, count);
     }

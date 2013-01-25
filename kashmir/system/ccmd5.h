@@ -28,7 +28,7 @@ class ccmd5 : public md5::engine<ccmd5>, unique<ccmd5>
 public:
     ccmd5() { CC_MD5_Init(&ctx); }
 
-    void update(const char* const source, std::size_t count)
+    void update(const char *const source, std::size_t count)
     {
         CC_MD5_Update(&ctx, reinterpret_cast<const void *const>(source), count);
     }

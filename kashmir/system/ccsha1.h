@@ -28,7 +28,7 @@ class ccsha1 : public sha1::engine<ccsha1>, unique<ccsha1>
 public:
     ccsha1() { CC_SHA1_Init(&ctx); }
 
-    void update(const char* const source, std::size_t count)
+    void update(const char *const source, std::size_t count)
     {
         CC_SHA1_Update(&ctx, reinterpret_cast<const void *const>(source), count);
     }

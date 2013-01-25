@@ -15,8 +15,9 @@
     LICENSE_1_0.txt or a copy at <http://www.boost.org/LICENSE_1_0.txt>.)
 */
 
-#include "kashmir/md5.h"
 #include "kashmir/uuid_gen.h"
+#include "kashmir/system/ccmd5.h"
+#include "kashmir/system/ccsha1.h"
 #include "kashmir/system/devrand.h"
 
 #include <iostream>
@@ -26,14 +27,11 @@
 
 namespace
 {
-    using std::ostream;
-    using std::ofstream;
-
     int n = 1;
     int v = 4;
 
-    ostream* outp = &std::cout;
-    ofstream ofile;
+    std::ostream* outp = &std::cout;
+    std::ofstream ofile;
 
     void parse_cmd_line(int argc, char *argv[])
     {
@@ -68,23 +66,35 @@ namespace
 
 int main(int argc, char *argv[])
 {
-    using kashmir::md5_t;
-
-    using kashmir::uuid::uuid_gen;
+    using kashmir::system::ccmd5;
+    using kashmir::system::ccsha1;
     using kashmir::system::DevRand;
 
     parse_cmd_line(argc, argv);
-    ostream& out = *outp;
+    std::ostream& out = *outp;
+
+    kashmir::uuid_t uuid;
 
     if (v == 3)
     {
-        out << md5_t() << '\n';
+        ccmd5 md5engine;
+        out << kashmir::uuid::generate(md5engine, uuid, "") << '\n';
+        return 0;
+    }
+
+    if (v == 5)
+    {
+        ccsha1 sha1engine;
+        out << kashmir::uuid::generate(sha1engine, uuid, "") << '\n';
         return 0;
     }
 
     DevRand devrand;
     for (int i = 0; i < n; i++)
-        out << *uuid_gen(devrand) << '\n';
+    {
+        devrand >> uuid;
+        out << uuid << '\n';
+    }
 
     return 0;
 }

@@ -20,7 +20,7 @@ class AbstractRandom : public randomstream<AbstractRandom>
 public:
     virtual ~AbstractRandom() {}
 
-    virtual void read(char* buffer, std::size_t count) = 0;
+    virtual void read(char *buffer, std::size_t count) = 0;
 };
 
 }}
