@@ -47,7 +47,7 @@ public:
         CryptReleaseContext(hProv, 0);
     }
 
-    void read(char* buffer, std::size_t count)
+    void read(char *buffer, std::size_t count)
     {
         if (!CryptGenRandom(hProv, count, buffer))
             throw std::runtime_error("system failed to generate random data.");

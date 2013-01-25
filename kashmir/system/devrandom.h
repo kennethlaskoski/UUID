@@ -30,7 +30,7 @@ public:
             throw std::runtime_error("failed to open random device.");
     }
 
-    void read(char* buffer, std::size_t count)
+    void read(char *buffer, std::size_t count)
     {
         file.read(buffer, count);
     }

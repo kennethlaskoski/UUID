@@ -50,7 +50,7 @@ randomstream<crtp_impl>& operator>>(randomstream<crtp_impl>& is, uuid_t& uuid)
 }
 
 template<class crtp_impl>
-uuid_t uuid_gen(randomstream<crtp_impl>& is)
+uuid_t generate(randomstream<crtp_impl>& is)
 {
     uuid_t uuid;
     is >> uuid;
@@ -58,7 +58,7 @@ uuid_t uuid_gen(randomstream<crtp_impl>& is)
 }
 
 template<class crtp_impl>
-uuid_t uuid_gen(md5::engine<crtp_impl>& md5engine, const uuid_t& nameSpace, const std::string& name)
+uuid_t generate(md5::engine<crtp_impl>& md5engine, const uuid_t& nameSpace, const std::string& name)
 {
     md5engine.update(reinterpret_cast<const char *const>(&nameSpace), 16);
     md5engine.update(name.c_str(), name.size());
@@ -82,7 +82,7 @@ uuid_t uuid_gen(md5::engine<crtp_impl>& md5engine, const uuid_t& nameSpace, cons
 }
 
 template<class crtp_impl>
-uuid_t uuid_gen(sha1::engine<crtp_impl>& sha1engine, const uuid_t& nameSpace, const std::string& name)
+uuid_t generate(sha1::engine<crtp_impl>& sha1engine, const uuid_t& nameSpace, const std::string& name)
 {
     sha1engine.update(reinterpret_cast<const char *const>(&nameSpace), 16);
     sha1engine.update(name.c_str(), name.size());

@@ -18,12 +18,12 @@ namespace sha1 {
 template<class crtp_impl>
 class engine
 {
-    crtp_impl* const self;
+    crtp_impl *const self;
 
 public:
     engine<crtp_impl>() : self(static_cast<crtp_impl*>(this)) {}
 
-    void update(const char* const source, std::size_t count)
+    void update(const char *const source, std::size_t count)
     {
         self->update(source, count);
     }
