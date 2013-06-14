@@ -7,8 +7,6 @@
 /** @file cli.cpp
     @brief UNIX command line interface
     @author Copyright (C) 2009 Kenneth Laskoski
-    based on work by
-    @author Copyright (C) 2004-2008 Ralf S. Engelschall <rse@engelschall.com>
 
     Use, modification, and distribution are subject
     to the Boost Software License, Version 1.0.  (See accompanying file
@@ -58,9 +56,10 @@ namespace
                 default:
                     exit(1);
             }
+
+            argv += optind;
+            argc -= optind;
         }
-        argv += optind;
-        argc -= optind;
     }
 }
 
