@@ -12,6 +12,8 @@
 		9F59B3C8150F294200AD7F5A /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9F59B3C7150F294200AD7F5A /* CoreGraphics.framework */; };
 		9F59B3D4150F294200AD7F5A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F59B3D3150F294200AD7F5A /* AppDelegate.m */; };
 		9F59B3DA150F294200AD7F5A /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F59B3D9150F294200AD7F5A /* ViewController.m */; };
+		9F6308AA2628E4E900303E1C /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9F6308A92628E4E900303E1C /* Images.xcassets */; };
+		9F6308AC2628E55700303E1C /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9F6308AB2628E55700303E1C /* Launch Screen.storyboard */; };
 		9F6CA1FF16E075C30086E6B4 /* UUIDModel.mm in Sources */ = {isa = PBXBuildFile; fileRef = 9F6CA1FE16E075C30086E6B4 /* UUIDModel.mm */; };
 		9F6E5B1D16E2C2CB0085B009 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9F6E5B0D16E2C2CB0085B009 /* Default-568h@2x.png */; };
 		9F6E5B1E16E2C2CB0085B009 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 9F6E5B0E16E2C2CB0085B009 /* Default.png */; };
@@ -49,6 +51,8 @@
 		9F59B3D3150F294200AD7F5A /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = View/AppDelegate.m; sourceTree = "<group>"; };
 		9F59B3D8150F294200AD7F5A /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ViewController.h; path = View/ViewController.h; sourceTree = "<group>"; };
 		9F59B3D9150F294200AD7F5A /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = ViewController.m; path = View/ViewController.m; sourceTree = "<group>"; };
+		9F6308A92628E4E900303E1C /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = uuid/Images.xcassets; sourceTree = "<group>"; };
+		9F6308AB2628E55700303E1C /* Launch Screen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
 		9F6CA1FD16E075C30086E6B4 /* UUIDModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UUIDModel.h; path = Model/UUIDModel.h; sourceTree = "<group>"; };
 		9F6CA1FE16E075C30086E6B4 /* UUIDModel.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = UUIDModel.mm; path = Model/UUIDModel.mm; sourceTree = "<group>"; };
 		9F6E5B0D16E2C2CB0085B009 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
@@ -122,6 +126,7 @@
 		9F59B3B4150F294200AD7F5A = {
 			isa = PBXGroup;
 			children = (
+				9F6308A92628E4E900303E1C /* Images.xcassets */,
 				9FA5C1F916E04F54006EAF09 /* Model */,
 				9F59B3C9150F294200AD7F5A /* View */,
 				9F59B3C2150F294200AD7F5A /* Frameworks */,
@@ -156,6 +161,7 @@
 				9F59B3D8150F294200AD7F5A /* ViewController.h */,
 				9F59B3D9150F294200AD7F5A /* ViewController.m */,
 				9F888EB4174B37D4009AE086 /* MainStoryboard.storyboard */,
+				9F6308AB2628E55700303E1C /* Launch Screen.storyboard */,
 				9F59B3CA150F294200AD7F5A /* Supporting Files */,
 			);
 			name = View;
@@ -257,9 +263,11 @@
 				9F6E5B2116E2C2CB0085B009 /* Icon-72.png in Resources */,
 				9F6E5B2216E2C2CB0085B009 /* Icon-Small-50.png in Resources */,
 				9F6E5B2316E2C2CB0085B009 /* Icon-Small.png in Resources */,
+				9F6308AA2628E4E900303E1C /* Images.xcassets in Resources */,
 				9F6E5B2416E2C2CB0085B009 /* Icon-Small@2x.png in Resources */,
 				9F6E5B2516E2C2CB0085B009 /* Icon.png in Resources */,
 				9F6E5B2616E2C2CB0085B009 /* Icon@2x.png in Resources */,
+				9F6308AC2628E55700303E1C /* Launch Screen.storyboard in Resources */,
 				9F6E5B2716E2C2CB0085B009 /* icon1024.png in Resources */,
 				9F6E5B2816E2C2CB0085B009 /* iTunesArtwork in Resources */,
 				9F6E5B2A16E2C2CB0085B009 /* Settings.bundle in Resources */,
@@ -382,6 +390,7 @@
 		9F59B3DE150F294200AD7F5A /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
@@ -394,7 +403,7 @@
 				PRODUCT_NAME = "UUID Genie";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				TARGETED_DEVICE_FAMILY = 1;
+				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -402,6 +411,7 @@
 		9F59B3DF150F294200AD7F5A /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Kenneth Laskoski";
 				CODE_SIGN_STYLE = Automatic;
@@ -415,7 +425,7 @@
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "C2AFBA5D-8DDF-412E-BF08-592888107E24";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				STRIP_INSTALLED_PRODUCT = YES;
-				TARGETED_DEVICE_FAMILY = 1;
+				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

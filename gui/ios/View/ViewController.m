@@ -47,16 +47,6 @@
     [self becomeFirstResponder];
 }
 
-- (void)viewDidUnload
-{
-    [self setModel:nil];   
-    [self setTextView:nil];
-    [self setNTextField:nil];
-    [self setNameTextField:nil];
-    
-    [super viewDidUnload];
-}
-
 // this is necessary to get the shake event
 - (BOOL)canBecomeFirstResponder
 {
@@ -68,11 +58,6 @@
 {
     if (motion == UIEventSubtypeMotionShake)
         [self generateV4:nil];
-}
-
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
-{
-    return (interfaceOrientation == UIInterfaceOrientationPortrait);
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
