@@ -1,4 +1,4 @@
-# uuid
+# UUID
 Universally Unique ID - as defined by ISO/IEC 9834-8:2005
 
 This is an old work of mine that I found at Sourceforge. It's a pretty thorough C++ implementation of UUIDs.
